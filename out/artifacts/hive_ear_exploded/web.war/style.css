@@ -1,0 +1,14 @@
+#header {
+    height: 50px;
+    background: #00B25C; border-bottom: 1px solid #00792D;
+    /*border-top: 1px solid #00792D;*/
+}
+#footer {
+    position: fixed;
+    left: 0; bottom: 0;
+    padding: 10px;
+    background: #00B25C;
+    border-top: 1px solid #00792D;
+    color: #00792D;
+    width: 100%;
+}

@@ -1,0 +1,29 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="hive:war exploded">
+    <output-path>$PROJECT_DIR$/target/hive</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>hive</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="hive" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: javax.mail:mail:1.4.5" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.6" />
+          <element id="library" level="project" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/hive/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="hive/web/Web" />
+    </root>
+  </artifact>
+</component>

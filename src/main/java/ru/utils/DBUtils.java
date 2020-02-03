@@ -1,0 +1,449 @@
+package ru.utils;
+
+import ru.objects.OrgUser;
+import ru.objects.Task;
+import ru.objects.roles.RolesEnum;
+
+import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+public class DBUtils {
+
+    private static final String dbUrl = "jdbc:postgresql:hive_db?user=postgres&password=123";
+
+    private Connection connection;
+
+    public DBUtils() {
+        connection = getConnection();
+    }
+
+    public void connectionClose(){
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Ошибка закрытия соединения с базой данных");
+        }
+    }
+
+    private Connection getConnection(){
+        Connection connection = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(dbUrl);
+        } catch (Exception e) {
+            System.out.println("Ошибка подключения к базе данных: " + e);
+        }
+        return connection;
+    }
+
+    public boolean isExists(String data, String var){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM organizations WHERE org_"+var+"='"+data.trim()+"'");
+            if (!rs.next())
+                return false;
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения данных организации: " + e);
+        }
+        return true;
+    }
+
+    public boolean isExistsUsers(String data, String var){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM org_users WHERE "+var+"='"+data.trim()+"'");
+            if (!rs.next())
+                return false;
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения данных пользователя организации: " + e);
+        }
+        return true;
+    }
+
+    public String getOrgName(String login){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT org_name FROM organizations WHERE org_login='"+login+"'");
+            if (rs.next()){
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения имени организации: " + e);
+        }
+        return "unknown";
+    }
+
+    public String getOrgNameById(String id){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT org_name FROM organizations WHERE confirmation_uuid='"+id+"'");
+            if (rs.next()){
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения имени организации: " + e);
+        }
+        return "Unknown org";
+    }
+
+    public String getLastTaskPrefix(String org_uuid){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT prefix FROM task_prefix WHERE org_uuid='"+org_uuid+"' ORDER by create_date desc");
+            if (rs.next()){
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения последнего префикса задачи: " + e);
+        }
+        return "HV0";
+    }
+
+    public boolean addLastTaskPrefix(String org_uuid, String taskPrefix){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("INSERT INTO task_prefix (org_uuid, prefix, create_date) VALUES ('"+org_uuid+"','"+taskPrefix+"', current_timestamp)");
+        } catch (SQLException e) {
+            System.out.println("Ошибка внесения последнего префикса задачи: " + e);
+            return false;
+        }
+        return true;
+    }
+
+    public Map<String, String> getOrgUsersMap(String org_id){
+        Map<String, String> orgUsers = new LinkedHashMap<>();
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT user_uuid, first_name, last_name, user_role FROM org_users WHERE org_uuid='"+org_id+"' order by last_name desc;");
+            while (rs.next()){
+                orgUsers.put(rs.getString(1), rs.getString(2) +" "+ rs.getString(3) +" ("+ rs.getString(4)+")");
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения списка пользователей из таблицы org_users: " + e);
+        }
+        return orgUsers;
+    }
+
+    public OrgUser getOrgUserById(String userId){
+        OrgUser orgUser = new OrgUser();
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT org_uuid, first_name, last_name, user_role, user_email, reg_date, user_icon  FROM org_users" +
+                    " WHERE user_uuid='"+userId+"'");
+            if (rs.next()){
+                orgUser.setUserId(userId);
+                orgUser.setOrgId(rs.getString(1));
+                orgUser.setFirstName(rs.getString(2));
+                orgUser.setLastName(rs.getString(3));
+                orgUser.setRole(RolesEnum.getRoleByName(rs.getString(4)));
+                orgUser.setUserEmail(rs.getString(5));
+                try {
+                    orgUser.setRegDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString(6)));
+                } catch (ParseException e) {
+                    orgUser.setRegDate(null); //почему то не получили дату регистрации пользователя
+                }
+                orgUser.setUserIcon(rs.getString(7));
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения пользователя организации: " + e);
+        }
+        return orgUser;
+    }
+
+    public OrgUser getOrgUserByLoginPassPrefix(String login, String pass, String prefix){
+        OrgUser orgUser = null;
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT user_uuid, org_uuid, first_name, last_name, user_role, user_email, reg_date, user_icon  FROM org_users" +
+                    " where org_uuid in (select confirmation_uuid from organizations where org_prefix='"+prefix+"' and confirmation_uuid is not null and email_confirmed=true)" +
+                    " and user_login='"+login+"' and user_password='"+pass+"' and user_confirmed=true");
+            if (rs.next()){
+                orgUser = new OrgUser();
+                orgUser.setUserId(rs.getString(1));
+                orgUser.setOrgId(rs.getString(2));
+                orgUser.setFirstName(rs.getString(3));
+                orgUser.setLastName(rs.getString(4));
+                orgUser.setRole(RolesEnum.getRoleByName(rs.getString(5)));
+                orgUser.setUserEmail(rs.getString(6));
+                try {
+                    orgUser.setRegDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getString(7)));
+                } catch (ParseException e) {
+                    orgUser.setRegDate(null); //почему то не получили дату регистрации пользователя
+                }
+                orgUser.setUserIcon(rs.getString(8));
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения пользователя организации по связке 'префикс - логин - пароль': " + e);
+        }
+        return orgUser;
+    }
+
+    public List<Task> getShortOrgTaskList(String orgId){
+        List<Task> taskList = new LinkedList<>();
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT task_id, " +
+                    "creator_id, " +
+                    "head_line, " +
+                    "dead_line, " +
+                    "assign_id, " +
+                    "priority  " +
+                    " FROM task WHERE creator_org_id='"+orgId+"' order by create_date desc LIMIT 100");
+
+            while (rs.next()){
+                Task task = new Task();
+
+                task.setId(rs.getString(1));
+                task.setCreatorId(rs.getString(2));
+                task.setHeadLine(rs.getString(3));
+                task.setDeadLine(rs.getDate(4));
+
+                String assignId = rs.getString(5);
+                OrgUser orgUser = this.getOrgUserById(assignId);
+                task.setAssign(orgUser);
+                task.setPriority(rs.getString(6));
+
+                taskList.add(task);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения краткого представления списка задач организации: " + e);
+        }
+        return taskList;
+    }
+
+    public List<Task> getUserShortTaskList(String userId){
+        List<Task> taskList = new LinkedList<>();
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT task_id, " +
+                    "creator_id, " +
+                    "head_line, " +
+                    "dead_line, " +
+                    "assign_id, " +
+                    "priority  " +
+                    " FROM task WHERE assign_id='"+userId+"' order by create_date desc");
+
+            while (rs.next()){
+                Task task = new Task();
+
+                task.setId(rs.getString(1));
+                task.setCreatorId(rs.getString(2));
+                task.setHeadLine(rs.getString(3));
+                task.setDeadLine(rs.getDate(4));
+
+                String assignId = rs.getString(5);
+                OrgUser orgUser = this.getOrgUserById(assignId);
+                task.setAssign(orgUser);
+                task.setPriority(rs.getString(6));
+
+                taskList.add(task);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения краткого представления списка задач пользователя: " + e);
+        }
+        return taskList;
+    }
+
+    public Task getTaskById(String taskId){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT creator_org_id, " +
+                    "creator_id, " +
+                    "head_line, " +
+                    "description, " +
+                    "project, " +
+                    "dead_line, " +
+                    "assign_id, " +
+                    "attachment_line, " +
+                    "create_date, " +
+                    "priority  " +
+                    " FROM task WHERE task_id='"+taskId+"'");
+
+            if (rs.next()){
+                Task task = new Task();
+
+                task.setCreatorOrgId(rs.getString(1));
+                task.setCreatorId(rs.getString(2));
+                task.setHeadLine(rs.getString(3));
+                task.setDescription(rs.getString(4));
+                task.setProject(rs.getString(5));
+                task.setDeadLine(rs.getDate(6));
+
+                String assignId = rs.getString(7);
+                OrgUser orgUser = this.getOrgUserById(assignId);
+                task.setAssign(orgUser);
+
+                task.setAttachmentLine(rs.getString(8));
+                task.setCreateDate(rs.getDate(9));
+                task.setPriority(rs.getString(10));
+
+                return task;
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения представления задачи: " + e);
+        }
+        return null;
+    }
+
+    public String getFilesById(String id){
+        String fileNames = null;
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT file_name FROM notes WHERE note_id='"+id+"'");
+            if (rs.next()){
+                fileNames = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения записи о файлах таблицы notes: " + e);
+        }
+        return fileNames;
+    }
+
+    public String getAudioById(String id){
+        String fileNames = null;
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT audio_file FROM notes WHERE note_id='"+id+"'");
+            if (rs.next()){
+                fileNames = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения записи об аудио файлах таблицы notes: " + e);
+        }
+        return fileNames;
+    }
+
+    public String getConfirmationUuid(String login){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT confirmation_uuid FROM organizations WHERE org_login='"+login+"'");
+            if (rs.next()){
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения uuid организации: " + e);
+        }
+        return login;
+    }
+
+    public String getValueFromOrganizationByUUID(String var, String uuid){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT "+var+" FROM organizations WHERE confirmation_uuid='"+uuid+"'");
+            if (rs.next()){
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения '"+var+"' организации: " + e);
+        }
+        return null;
+    }
+
+    public boolean isOrgProfileExists(String login, String password){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM organizations WHERE org_login='"+login+"' and org_password='"+password+"' and email_confirmed=true");
+            if (rs.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения профиля организации: " + e);
+        }
+        return false;
+    }
+
+    public boolean isOrgPrefixExists(String prefix){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM organizations WHERE org_prefix='"+prefix+"' and confirmation_uuid is not null and email_confirmed=true");
+            if (rs.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения префикса организации: " + e);
+        }
+        return false;
+    }
+
+    public boolean insert(String... data){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("INSERT INTO organizations (org_name, org_address, org_email, org_login, org_password, email_confirmed, confirmation_uuid, reg_date) " +
+                    "VALUES ('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"', false,'"+data[5]+"', current_timestamp)");
+        } catch (SQLException e) {
+            System.out.println("Ошибка внесения записи об организации в таблицу organizations: " + e);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean insertUsers(String... data){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("INSERT INTO org_users (org_uuid, user_uuid, first_name, last_name, user_role, user_email, user_login, user_password, user_confirmed, reg_date, user_icon) " +
+                    "VALUES ('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"','"+data[5]+"','"+data[6]+"','"+data[7]+"', false, current_timestamp, '"+data[8]+"')");
+        } catch (SQLException e) {
+            System.out.println("Ошибка внесения записи о пользователе организации в таблицу org_users: " + e);
+            return false;
+        }
+        return true;
+    }
+
+    public void addNewTask(Task task){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("INSERT INTO task (task_id, creator_id, creator_org_id, head_line, description, project, dead_line, assign_id, attachment_line, create_date, priority) " +
+                    "VALUES ('"+task.getId()
+                    +"','"+task.getCreatorId()
+                    +"','"+task.getCreatorOrgId()
+                    +"','"+task.getHeadLine()
+                    +"','"+task.getDescription()
+                    +"','"+task.getProject()
+                    +"','"+task.getDeadLine()
+                    +"','"+task.getAssign().getUserId()
+                    +"','"+task.getAttachmentLine()
+                    +"','"+task.getCreateDate()
+                    +"','"+task.getPriority()+"')");
+        } catch (SQLException e) {
+            System.out.println("Ошибка внесения записи в таблицу task: " + e);
+        }
+    }
+
+    public void deleteOrgEmail(String email){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("delete from organizations where org_email='"+email+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка удаления записи об организации из таблицы organizations: " + e);
+        }
+    }
+
+    public void deleteUserEmail(String email){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("delete from org_users where user_email='"+email+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка удаления записи о пользователе из таблицы org_users: " + e);
+        }
+    }
+
+    public void deleteNote(String id){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("delete from notes where note_id='"+id+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка удаления записи из таблицы notes: " + e);
+        }
+    }
+
+    public void updateConfirmation(String table, String var1, String var2, String uuid){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("update "+table+" set "+var1+"_confirmed=true where "+var2+"_uuid='"+uuid+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка установки признака подтверждения: " + e);
+        }
+    }
+}
