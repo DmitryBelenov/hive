@@ -6,6 +6,7 @@ import ru.objects.TaskComment;
 import ru.objects.OrgUser;
 import ru.objects.Task;
 import ru.utils.DBUtils;
+import ru.utils.Utils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -69,7 +70,7 @@ public class NewTaskServlet extends HttpServlet {
 
         // если нет id пользоваетля, значит мы под организацией и рендерим ее главную страницу
         RequestDispatcher view;
-        if (user_uuid == null || user_uuid.equals("null")) {
+        if (Utils.isNull(user_uuid)) {
             view = req.getRequestDispatcher(DashboardRenderServlet.TypesEnum.organization.getPage());
         } else {
             OrgUser orgUser = db.getOrgUserById(user_uuid);

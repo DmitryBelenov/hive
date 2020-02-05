@@ -62,7 +62,7 @@
         <input type="text" name="org_name" value="<%= request.getAttribute("org_name")%>" hidden>
         <input type="text" name="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
 
-        <button class="float-left submit-button cool_button">Back</button>
+        <button class="float-left submit-button cool_button">Main</button>
     </form>
     <div id="footer">&copy; 2020</div>
 </div>

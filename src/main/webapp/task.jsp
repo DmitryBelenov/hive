@@ -1,4 +1,8 @@
 <%@ page import="ru.objects.Task" %>
+<%@ page import="ru.objects.TaskComment" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="ru.utils.Utils" %>
 <%@page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -13,6 +17,17 @@
         }
     </style>
 </head>
+<script>
+    function checkFilesNum(files) {
+        if(files.length>5) {
+            alert("Добавить можно не более 5 изображений!");
+            document.getElementById("attachment").value = "";
+
+            return false;
+        }
+    }
+</script>
+
 <%
     Task task = (Task) request.getAttribute("task");
 %>
@@ -33,6 +48,18 @@
         <input type="hidden" name="org_uuid" value="<%= task.getCreatorOrgId()%>"/>
         <span style="font-size: 30px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span>
         <hr>
+
+        <div style="text-align: right">
+        <form method="post" action="main">
+            <input type="text" name="type" value="<%= request.getAttribute("type")%>" hidden>
+            <input type="text" name="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
+            <input type="text" name="org_name" value="<%= request.getAttribute("org_name")%>" hidden>
+            <input type="text" name="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
+
+            <button class="float-left submit-button cool_button" onclick="this.disabled = true; this.form.submit();">Main</button> <!-- как то проверить disabled=true по нажатию -->
+        </form>
+        </div>
+
         <span style="font-size: 12px; color: #043509; font-family: 'Tahoma';">created by: </span><span style="font-size: 14px; font-family: 'Tahoma';"><%= request.getAttribute("creator_name_role")%></span>
         <br>
         <span style="font-size: 12px; color: #043509; font-family: 'Tahoma';">create date: </span><span style="font-size: 14px; font-family: 'Tahoma';"><%= task.getCreateDate()%></span>
@@ -54,7 +81,7 @@
         <% String attachmentLine = task.getAttachmentLine();
 
             int imgRow = 1;
-            if (attachmentLine != null && !attachmentLine.equals("null")) {
+            if (!Utils.isNull(attachmentLine)) {
                 String[] attachArray = attachmentLine.split(":");
                 for (String name : attachArray) {
         %>
@@ -71,12 +98,61 @@
             }
             ;
         %>
-        <br><br>
+        <form method="post" action="add_attachment" enctype="multipart/form-data">
+            <input type="text" name="task_id" value="<%= task.getId()%>" hidden>
+            <div style="text-align: right">
+                <input type="file" name="attachment" id="attachment" accept="image/*" multiple onchange="checkFilesNum(this.files)">
+                <button class="float-left submit-button cool_button">attach</button>
+            </div>
+        </form>
+        <br>
         <span style="font-size: 12px; color: #043509; font-family: 'Tahoma';">
         Comments
         </span>
         <div class="scroll_block_task_comments">
 
+            <form method="post" action="add_comment">
+            <input type="text" name="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
+            <input type="text" name="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
+            <input type="text" name="task_id" value="<%= task.getId()%>" hidden>
+
+            <textarea rows="2" cols="106" name="content" id="comment" maxlength="1000" style="resize: none"></textarea>
+            <div style="text-align: right">
+            <button class="float-left submit-button cool_button" id="add_comment">comment</button>
+                <script>
+                    document.getElementById("add_comment").onclick = function()
+                    {
+                        var comment = document.getElementById("comment").value;
+                        if (comment.trim() === "")
+                        {
+                            alert("Комментарий не может быть пустым");
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                </script>
+            </div>
+            <hr>
+            </form>
+            <%
+            List<TaskComment> comments = task.getTaskComments();
+            if (comments.size() > 0 ) {
+              for (TaskComment comment : comments) {
+                  %>
+            <span style="font-size: 10px; color: #043509; font-family: 'Tahoma';"><%= comment.getPersonName() + " " + comment.getCreateDate()%>:</span><br>
+            <span style="font-size: 15px; color: #043509; font-family: 'Tahoma';"><%= comment.getContent()%></span>
+            <br><br>
+            <%
+              }
+            } else {
+                %>
+            <span style="font-size: 12px; color: #043509; font-family: 'Tahoma';">
+            No comments yet :(
+            </span>
+            <%
+            }
+            %>
         </div>
 
     </div>

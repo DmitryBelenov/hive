@@ -5,6 +5,8 @@ import ru.objects.OrgUser;
 import ru.objects.Task;
 import ru.utils.CryptoUtils;
 import ru.utils.DBUtils;
+import ru.utils.Utils;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,7 +32,7 @@ public class AuthServlet extends HttpServlet {
 
         DBUtils db = new DBUtils();
 
-        if (prefix.equals("null") || prefix.isEmpty()) {
+        if (Utils.isNull(prefix) || prefix.isEmpty()) {
             if (!Authorization.auth(login, password, db)) {
                 req.setAttribute("org_name", login);
 

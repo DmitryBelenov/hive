@@ -87,7 +87,10 @@
              %>
              <tr>
                 <form method="post" action="open_task">
-                <input type="hidden" name="task_id" value="<%= task.getId()%>"/>
+                 <input type="hidden" name="task_id" value="<%= task.getId()%>"/>
+                 <input type="hidden" name="org_uuid" value="<%= orgUser.getOrgId()%>"/>
+                 <input type="hidden" name="user_uuid" value="<%= orgUser.getUserId()%>"/>
+
                 <td valign="top" align="center" width="30"><img style="width: 100%; height: 100%" src="resources/<%= task.getPriority()%>.jpg"></td>
                 <td><span
                         style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
@@ -127,6 +130,9 @@
              <tr>
              <form method="post" action="open_task">
              <input type="hidden" name="task_id" value="<%= task.getId()%>"/>
+             <input type="hidden" name="org_uuid" value="<%= orgUser.getOrgId()%>"/>
+             <input type="hidden" name="user_uuid" value="<%= orgUser.getUserId()%>"/>
+
              <td valign="top" align="center" width="30"><img style="width: 100%; height: 100%"
                                                              src="resources/<%= task.getPriority()%>.jpg"></td>
              <td><span

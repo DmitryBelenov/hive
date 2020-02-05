@@ -2,12 +2,14 @@ package ru.utils;
 
 import ru.objects.OrgUser;
 import ru.objects.Task;
+import ru.objects.TaskComment;
 import ru.objects.roles.RolesEnum;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 public class DBUtils {
 
@@ -112,7 +114,18 @@ public class DBUtils {
         return true;
     }
 
-    public Map<String, String> getOrgUsersMap(String org_id){
+    public void addTaskComment(String... comment) {
+        String id = UUID.randomUUID().toString();
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("INSERT INTO task_comments (org_id, owner_id, task_id, text_content, create_date, comment_id)" +
+                    " VALUES ('" + comment[0] + "','" + comment[1] + "','" + comment[2] + "','" + comment[3] + "', current_timestamp, '"+id+"')");
+        } catch (SQLException e) {
+            System.out.println("Ошибка добавления комментария к задаче: " + e);
+        }
+    }
+
+        public Map<String, String> getOrgUsersMap(String org_id){
         Map<String, String> orgUsers = new LinkedHashMap<>();
         try {
             Statement s = connection.createStatement();
@@ -285,6 +298,54 @@ public class DBUtils {
             System.out.println("Ошибка получения представления задачи: " + e);
         }
         return null;
+    }
+
+    public List<TaskComment> getTaskCommentsById(String taskId){
+        List<TaskComment> comments = new LinkedList<>();
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT org_id, " +
+                    "owner_id, " +
+                    "task_id, " +
+                    "text_content, " +
+                    "create_date, " +
+                    "comment_id " +
+                    " FROM task_comments WHERE task_id='"+taskId+"' order by create_date desc");
+
+            while (rs.next()){
+                TaskComment comment = new TaskComment();
+
+                String orgId = rs.getString(1);
+                String ownerId = rs.getString(2);
+
+                // если id создателя коммента и id организации разные,
+                // значит коммент создал пользователь
+                if (!orgId.equals(ownerId)) {
+                    OrgUser user = getOrgUserById(ownerId);
+                    comment.setPersonName(user.getFirstName() + " " + user.getLastName() + " (" + user.getRole().getRoleName() + ") ");
+                } else {
+                    String orgName = getOrgNameById(orgId);
+                    comment.setPersonName(orgName + " (Org)");
+                }
+
+                comment.setOrgId(orgId);
+                comment.setOwnerId(ownerId);
+
+                comment.setTaskId(rs.getString(3));
+                comment.setContent(rs.getString(4));
+
+                Date createDate = rs.getTimestamp(5);
+                String formattedDate = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy").format(createDate);
+
+                comment.setCreateDate(formattedDate);
+                comment.setId(rs.getString(6));
+
+                comments.add(comment);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения комментариев задачи: " + e);
+        }
+        return  comments;
     }
 
     public String getFilesById(String id){
