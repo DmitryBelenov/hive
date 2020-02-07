@@ -95,7 +95,7 @@ public class NewTaskServlet extends HttpServlet {
         db.connectionClose();
     }
 
-    private String storeFiles(List<Part> fileParts, String org_uuid, String taskId, String taskHeadPrefix, String typeFolder, String type){
+    static String storeFiles(List<Part> fileParts, String org_uuid, String taskId, String taskHeadPrefix, String typeFolder, String type){
         StringBuilder names = new StringBuilder();
         if (fileParts.size() > 0) {
             try {
@@ -114,11 +114,13 @@ public class NewTaskServlet extends HttpServlet {
                             +"\\"
                             +taskId
                             +"\\"
-                            +taskHeadPrefix+(fileParts.size()>1 ? "-"+i : "") + type);
+                            +taskHeadPrefix + "-" + i + type);
                     FileUtils.copyInputStreamToFile(fileContent, targetFile);
 
                     names.append(taskHeadPrefix)
-                            .append(fileParts.size() > 1 ? "-" + i + (i == fileParts.size() ? "" : ":") : "");
+                            .append("-")
+                            .append(i)
+                            .append(i == fileParts.size() ? "" : ":");
 
                     i++;
                 }

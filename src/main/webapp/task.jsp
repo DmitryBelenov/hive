@@ -79,10 +79,12 @@
         <span style="font-size: 18px; color: #043509; font-family: 'Tahoma';"><%= task.getDescription()%></span>
         <br><br><br>
         <% String attachmentLine = task.getAttachmentLine();
+            int numOfAttachments = 0;
 
             int imgRow = 1;
             if (!Utils.isNull(attachmentLine)) {
                 String[] attachArray = attachmentLine.split(":");
+                numOfAttachments = attachArray.length;
                 for (String name : attachArray) {
         %>
         <a href="${pageContext.request.contextPath}/attach/<%= task.getCreatorOrgId()%>/<%= task.getId()%>/<%= name%>">
@@ -98,11 +100,30 @@
             }
             ;
         %>
+
+        <%
+        boolean isAttachesMaxNum = numOfAttachments >= 25; // проверка на max кол-во файлов
+        %>
         <form method="post" action="add_attachment" enctype="multipart/form-data">
             <input type="text" name="task_id" value="<%= task.getId()%>" hidden>
+            <input type="text" name="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
+            <input type="text" name="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
             <div style="text-align: right">
                 <input type="file" name="attachment" id="attachment" accept="image/*" multiple onchange="checkFilesNum(this.files)">
-                <button class="float-left submit-button cool_button">attach</button>
+                <button id="add_attach" class="float-left submit-button cool_button">attach</button>   <!-- disabled= проверка на max кол-во файлов -->
+                <script>
+                    document.getElementById("add_attach").onclick = function()
+                    {
+                        var attaches = document.getElementById("attachment").files.length;
+                        if (attaches === 0)
+                        {
+                            alert("Необходимо выбрать вложение");
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                </script>
             </div>
         </form>
         <br>

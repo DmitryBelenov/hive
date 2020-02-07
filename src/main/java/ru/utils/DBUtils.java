@@ -114,6 +114,20 @@ public class DBUtils {
         return true;
     }
 
+    public String getTaskPrefixById(String taskId){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT head_line FROM task WHERE task_id='"+taskId+"'");
+            if (rs.next()){
+                String headLine = rs.getString(1);
+                return headLine.split(":")[0];
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения префикса задачи: " + e);
+        }
+        return null;
+    }
+
     public void addTaskComment(String... comment) {
         String id = UUID.randomUUID().toString();
         try {
@@ -298,6 +312,29 @@ public class DBUtils {
             System.out.println("Ошибка получения представления задачи: " + e);
         }
         return null;
+    }
+
+    public String getTaskAttachmentLine(String taskId){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT attachment_line FROM task WHERE task_id='"+taskId+"'");
+
+            if (rs.next()){
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения списка вложений задачи: " + e);
+        }
+        return null;
+    }
+
+    public void updateTaskAttachmentLine(String taskId, String newAttachmentLine){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("update task set attachment_line='"+newAttachmentLine+"' WHERE task_id='"+taskId+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка обновления списка вложений задачи: " + e);
+        }
     }
 
     public List<TaskComment> getTaskCommentsById(String taskId){
