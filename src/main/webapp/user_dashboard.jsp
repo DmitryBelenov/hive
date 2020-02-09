@@ -92,6 +92,7 @@
                  <input type="hidden" name="user_uuid" value="<%= orgUser.getUserId()%>"/>
 
                 <td valign="top" align="center" width="30"><img style="height: 100%" src="resources/<%= task.getPriority()%>.jpg"></td>
+                <td valign="top" align="center" width="40"><span style="font-size: 12px; color: #043509; font-family: 'Tahoma'; font-weight: bold"><%= task.getState()%></span></td>
                 <td><span
                         style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
@@ -135,6 +136,7 @@
 
              <td valign="top" align="center" width="30"><img style="height: 100%"
                                                              src="resources/<%= task.getPriority()%>.jpg"></td>
+             <td valign="top" align="center" width="40"><span style="font-size: 12px; color: #043509; font-family: 'Tahoma'; font-weight: bold"><%= task.getState()%></span></td>
              <td><span
                      style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">

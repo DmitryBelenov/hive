@@ -4,6 +4,7 @@ import ru.objects.OrgUser;
 import ru.objects.Task;
 import ru.objects.TaskComment;
 import ru.objects.roles.RolesEnum;
+import ru.objects.roles.TaskStatesEnum;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -216,7 +217,8 @@ public class DBUtils {
                     "head_line, " +
                     "dead_line, " +
                     "assign_id, " +
-                    "priority  " +
+                    "priority,  " +
+                    "state  " +
                     " FROM task WHERE creator_org_id='"+orgId+"' order by create_date desc LIMIT 100");
 
             while (rs.next()){
@@ -231,6 +233,7 @@ public class DBUtils {
                 OrgUser orgUser = this.getOrgUserById(assignId);
                 task.setAssign(orgUser);
                 task.setPriority(rs.getString(6));
+                task.setState(rs.getString(7));
 
                 taskList.add(task);
             }
@@ -249,7 +252,8 @@ public class DBUtils {
                     "head_line, " +
                     "dead_line, " +
                     "assign_id, " +
-                    "priority  " +
+                    "priority, " +
+                    "state  " +
                     " FROM task WHERE assign_id='"+userId+"' order by create_date desc");
 
             while (rs.next()){
@@ -264,6 +268,7 @@ public class DBUtils {
                 OrgUser orgUser = this.getOrgUserById(assignId);
                 task.setAssign(orgUser);
                 task.setPriority(rs.getString(6));
+                task.setState(rs.getString(7));
 
                 taskList.add(task);
             }
@@ -285,7 +290,8 @@ public class DBUtils {
                     "assign_id, " +
                     "attachment_line, " +
                     "create_date, " +
-                    "priority  " +
+                    "priority, " +
+                    "state  " +
                     " FROM task WHERE task_id='"+taskId+"'");
 
             if (rs.next()){
@@ -305,6 +311,7 @@ public class DBUtils {
                 task.setAttachmentLine(rs.getString(8));
                 task.setCreateDate(rs.getDate(9));
                 task.setPriority(rs.getString(10));
+                task.setState(rs.getString(11));
 
                 return task;
             }
@@ -383,6 +390,24 @@ public class DBUtils {
             System.out.println("Ошибка получения комментариев задачи: " + e);
         }
         return  comments;
+    }
+
+    public void setTaskStateById(String taskId, String state){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("update task set state='"+state+"' where task_id='"+taskId+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка установки статуса задачи: " + e);
+        }
+    }
+
+    public void setTaskAssignById(String taskId, String newAssignId){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("update task set assign_id='"+newAssignId+"' where task_id='"+taskId+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка переназначения задачи на пользователя: " + e);
+        }
     }
 
     public String getFilesById(String id){
@@ -492,7 +517,7 @@ public class DBUtils {
     public void addNewTask(Task task){
         try {
             Statement s = connection.createStatement();
-            s.executeUpdate("INSERT INTO task (task_id, creator_id, creator_org_id, head_line, description, project, dead_line, assign_id, attachment_line, create_date, priority) " +
+            s.executeUpdate("INSERT INTO task (task_id, creator_id, creator_org_id, head_line, description, project, dead_line, assign_id, attachment_line, create_date, priority, state) " +
                     "VALUES ('"+task.getId()
                     +"','"+task.getCreatorId()
                     +"','"+task.getCreatorOrgId()
@@ -503,7 +528,8 @@ public class DBUtils {
                     +"','"+task.getAssign().getUserId()
                     +"','"+task.getAttachmentLine()
                     +"','"+task.getCreateDate()
-                    +"','"+task.getPriority()+"')");
+                    +"','"+task.getPriority()
+                    +"','"+TaskStatesEnum.opened.getState() +"')");
         } catch (SQLException e) {
             System.out.println("Ошибка внесения записи в таблицу task: " + e);
         }

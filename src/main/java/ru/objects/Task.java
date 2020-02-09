@@ -16,7 +16,16 @@ public class Task {
     private String attachmentLine;
     private Date createDate;
     private String priority;
+    private String state;
     private List<TaskComment> taskComments;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public String getId() {
         return taskId;

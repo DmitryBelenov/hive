@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @MultipartConfig
 @WebServlet(name = "OpenTaskServlet", urlPatterns = "/open_task")
@@ -65,6 +66,9 @@ public class OpenTaskServlet extends HttpServlet {
 
             //если зашли под организацией то id пользователя нет и тип ставим 'организация'
             req.setAttribute("type", Utils.isNull(user_uuid) ? DashboardRenderServlet.TypesEnum.organization : DashboardRenderServlet.TypesEnum.user);
+
+            Map<String, String> orgUsersMap = db.getOrgUsersMap(org_uuid);
+            req.setAttribute("org_users", orgUsersMap);
 
             List<TaskComment> comments = db.getTaskCommentsById(taskId);
             task.setTaskComments(comments);
