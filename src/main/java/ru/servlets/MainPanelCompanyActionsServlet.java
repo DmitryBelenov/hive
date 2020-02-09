@@ -1,5 +1,6 @@
 package ru.servlets;
 
+import ru.objects.OrgUser;
 import ru.utils.DBUtils;
 
 import javax.servlet.RequestDispatcher;
@@ -20,7 +21,8 @@ public class MainPanelCompanyActionsServlet extends HttpServlet {
         task("new_task", "addTask.jsp"),
         event("new_event", "addEvent.jsp"),
         userEvent("event", "addEventUser.jsp"),
-        info("company_info", "companyInfo.jsp");
+        settings("company_settings", "companySettings.jsp"),
+        userSettings("settings", "userSettings.jsp");
 
         public String action;
         public String page;
@@ -67,6 +69,11 @@ public class MainPanelCompanyActionsServlet extends HttpServlet {
                 Map<String, String> orgUsersMap = db.getOrgUsersMap(org_uuid);
 
                 req.setAttribute("org_users", orgUsersMap);
+            }
+
+            if (ActionsEnum.userSettings.getAction().equals(action)){
+                OrgUser orgUser = db.getOrgUserById(user_uuid);
+                req.setAttribute("user", orgUser);
             }
 
             RequestDispatcher view = req.getRequestDispatcher(page);

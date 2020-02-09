@@ -67,8 +67,8 @@
              </span>
               &nbsp;&nbsp;&nbsp;
              <span style="font-size: 12px; font-family: 'Tahoma';">
-              <img style="width:2.5%" src="resources/info.png">
-               <input type="button" name="user_info" value="info" class="cool_button"
+              <img style="width:2.5%" src="resources/settings.png">
+               <input type="button" name="user_info" value="settings" class="cool_button"
                       onclick="{document.main_actions_form.action.value=this.value;
                        document.main_actions_form.submit();}"/>
              </span>
@@ -91,7 +91,7 @@
                  <input type="hidden" name="org_uuid" value="<%= orgUser.getOrgId()%>"/>
                  <input type="hidden" name="user_uuid" value="<%= orgUser.getUserId()%>"/>
 
-                <td valign="top" align="center" width="30"><img style="width: 100%; height: 100%" src="resources/<%= task.getPriority()%>.jpg"></td>
+                <td valign="top" align="center" width="30"><img style="height: 100%" src="resources/<%= task.getPriority()%>.jpg"></td>
                 <td><span
                         style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
@@ -133,7 +133,7 @@
              <input type="hidden" name="org_uuid" value="<%= orgUser.getOrgId()%>"/>
              <input type="hidden" name="user_uuid" value="<%= orgUser.getUserId()%>"/>
 
-             <td valign="top" align="center" width="30"><img style="width: 100%; height: 100%"
+             <td valign="top" align="center" width="30"><img style="height: 100%"
                                                              src="resources/<%= task.getPriority()%>.jpg"></td>
              <td><span
                      style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>

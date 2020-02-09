@@ -76,8 +76,8 @@
              </span>
               &nbsp;&nbsp;&nbsp;
              <span style="font-size: 12px; font-family: 'Tahoma';">
-              <img style="width:2.5%" src="resources/info.png">
-               <input type="button" name="info" value="company_info" class="cool_button"
+              <img style="width:2.5%" src="resources/settings.png">
+               <input type="button" name="info" value="company_settings" class="cool_button"
                       onclick="{document.main_actions_form.action.value=this.value;
                        document.main_actions_form.submit();}" />
              </span>
@@ -100,7 +100,7 @@
              <input type="hidden" name="task_id" value="<%= task.getId()%>"/>
              <input type="hidden" name="org_uuid" value="<%= org_uuid%>"/>
 
-             <td valign="top" align="center" width="30"><img style="width: 100%; height: 100%" src="resources/<%= task.getPriority()%>.jpg"></td>
+             <td valign="top" align="center" width="30"><img style="height: 100%" src="resources/<%= task.getPriority()%>.jpg"></td>
              <td><span style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
                          <%= task.getAssign().getFirstName() + " " + task.getAssign().getLastName() + " ("+ task.getAssign().getRole().getRoleName()+")"%></span></td>

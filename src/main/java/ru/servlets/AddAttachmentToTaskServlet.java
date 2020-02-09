@@ -2,11 +2,9 @@ package ru.servlets;
 
 import org.apache.commons.io.FileUtils;
 import ru.AbstractAddress;
-import ru.objects.Task;
 import ru.utils.DBUtils;
 import ru.utils.Utils;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -44,7 +42,7 @@ public class AddAttachmentToTaskServlet extends HttpServlet {
             DBUtils dbu = new DBUtils();
             String attachmentLine = dbu.getTaskAttachmentLine(taskId);
 
-            if (!Utils.isNull(attachmentLine)){
+            if (!Utils.isNull(attachmentLine)) {
                 String taskHeadPrefix;
                 int numOfAttaches;
 
@@ -75,9 +73,9 @@ public class AddAttachmentToTaskServlet extends HttpServlet {
                     fileContent = filePart.getInputStream();
 
                     File targetFile = new File(AbstractAddress.filesHome
-                            +org_uuid
-                            +"/image/task/"
-                            +taskId +"/"+ taskHeadPrefix + "-" + numOfAttaches + ".jpg");
+                            + org_uuid
+                            + "/image/task/"
+                            + taskId + "/" + taskHeadPrefix + "-" + numOfAttaches + ".jpg");
 
                     FileUtils.copyInputStreamToFile(fileContent, targetFile);
 
@@ -89,7 +87,7 @@ public class AddAttachmentToTaskServlet extends HttpServlet {
                 dbu.updateTaskAttachmentLine(taskId, newAttachmentLine.toString());
             } else {
                 String taskHeadPrefix = dbu.getTaskPrefixById(taskId);
-                String attachesNames = NewTaskServlet.storeFiles(attachParts, org_uuid, taskId, taskHeadPrefix,"image", ".jpg");
+                String attachesNames = NewTaskServlet.storeFiles(attachParts, org_uuid, taskId, taskHeadPrefix, "image", ".jpg");
 
                 dbu.updateTaskAttachmentLine(taskId, attachesNames);
             }
