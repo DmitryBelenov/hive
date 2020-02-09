@@ -2,6 +2,9 @@
 <%@ page import="ru.objects.Task" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="ru.utils.Utils" %>
 <%@page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -83,7 +86,9 @@
               %>
          <table>
              <%
+                 String deadlineColor;
                  for (Task task : userTaskList) {
+                     deadlineColor = Utils.getDeadLineColor(task);
              %>
              <tr>
                 <form method="post" action="open_task">
@@ -95,7 +100,7 @@
                 <td valign="top" align="center" width="40"><span style="font-size: 12px; color: #043509; font-family: 'Tahoma'; font-weight: bold"><%= task.getState()%></span></td>
                 <td><span
                         style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
-                 <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
+                 <td><span style="font-size: 12px; color: <%= deadlineColor%>; font-family: 'Tahoma';">
                          dl: <%= new SimpleDateFormat("dd:MM:yyyy").format(task.getDeadLine())%></span></td>
                 <td valign="top" align="center" width="50"><button
                         class="float-left submit-button cool_button">open</button></td>
@@ -125,8 +130,10 @@
             %>
              <table>
              <%
+                 String deadlineColor;
                  for (Task task : taskList) {
                      if (!userTaskIds.contains(task.getId())) {
+                         deadlineColor = Utils.getDeadLineColor(task);
              %>
              <tr>
              <form method="post" action="open_task">
@@ -141,7 +148,7 @@
                      style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
                          <%= task.getAssign().getFirstName() + " " + task.getAssign().getLastName() + " (" + task.getAssign().getRole().getRoleName() + ")"%></span></td>
-                 <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
+                 <td><span style="font-size: 12px; color: <%= deadlineColor%>; font-family: 'Tahoma';">
                          dl: <%= new SimpleDateFormat("dd:MM:yyyy").format(task.getDeadLine())%></span></td>
                  <td valign="top" align="center" width="50"><button
                          class="float-left submit-button cool_button">open</button></td>

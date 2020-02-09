@@ -114,7 +114,7 @@
         <br>
         <span style="font-size: 12px; color: #043509; font-family: 'Tahoma';">create date: </span><span style="font-size: 14px; font-family: 'Tahoma';"><%= task.getCreateDate()%></span>
         <br><span
-            style="font-size: 12px; color: #043509; font-family: 'Tahoma';">deadline: </span><span style="font-size: 14px; font-family: 'Tahoma';"><%= task.getDeadLine()%></span>
+            style="font-size: 12px; color: #043509; font-family: 'Tahoma';">deadline: </span><span style="font-size: 14px; font-family: 'Tahoma'; color: <%= Utils.getDeadLineColor(task)%>"><%= task.getDeadLine()%></span>
         <br><span
             style="font-size: 12px; color: #043509; font-family: 'Tahoma';">project: </span><span style="font-size: 14px; font-family: 'Tahoma';"><%= task.getProject()%></span>
         <br><br><br>

@@ -2,6 +2,7 @@
 <%@ page import="ru.objects.Task" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="ru.utils.Utils" %>
 <%@page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -93,7 +94,9 @@
                 %>
              <table>
              <%
+                 String deadlineColor;
                for (Task task : taskList) {
+                   deadlineColor = Utils.getDeadLineColor(task);
                    %>
              <tr>
              <form method="post" action="open_task">
@@ -105,7 +108,7 @@
              <td><span style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
                          <%= task.getAssign().getFirstName() + " " + task.getAssign().getLastName() + " ("+ task.getAssign().getRole().getRoleName()+")"%></span></td>
-                 <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
+                 <td><span style="font-size: 12px; color: <%= deadlineColor%>; font-family: 'Tahoma';">
                          dl: <%= new SimpleDateFormat("dd:MM:yyyy").format(task.getDeadLine())%></span></td>
                  <td valign="top" align="center" width="50"><button class="float-left submit-button cool_button">open</button></td>
               </form>
