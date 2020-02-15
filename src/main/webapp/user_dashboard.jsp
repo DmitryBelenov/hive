@@ -38,7 +38,7 @@
             <span class="header">&nbsp;Hive</span>
             <img style="width:1.2%" src="resources/logo.png">
             <span class="header"><%
-                out.println(" / " + org_name + " / " + orgUser.getFirstName() + " " + orgUser.getLastName());
+                out.println(org_name + " / " + orgUser.getFirstName() + " " + orgUser.getLastName());
             %></span>
         </h1>
     </div>

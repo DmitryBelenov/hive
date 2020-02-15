@@ -41,7 +41,7 @@
             <span class="header">&nbsp;Hive</span>
             <img style="width:1.2%" src="resources/logo.png">
             <span class="header"><%
-                out.println("/ " + request.getAttribute("org_name") + "/ " + task.getHeadLine().split(":")[0]);
+                out.println(request.getAttribute("org_name") + "/ " + task.getHeadLine().split(":")[0]);
             %></span>
         </h1>
     </div>
@@ -64,41 +64,58 @@
 
         <span
             style="font-size: 12px; color: #043509; font-family: 'Tahoma';">priority: </span><span style="font-size: 14px; font-family: 'Tahoma';"><%= task.getPriority()%></span>
-        <img style="width: 2%; height: 1%" src="resources/<%= task.getPriority()%>.jpg">&nbsp;&nbsp;<span style="font-size: 12px; color: #043509; font-family: 'Tahoma';">state: </span>
-        <span style="font-size: 15px; color: #043509; font-family: 'Tahoma'; font-weight: bold"><%= task.getState()%></span>
-
+        <img style="width: 2%; height: 1%" src="resources/<%= task.getPriority()%>.jpg">&nbsp;&nbsp;
         <form id="task_states" method="post" action="set_state">
             <input type="text" name="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
             <input type="text" name="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
             <input type="text" name="task_id" value="<%= task.getId()%>" hidden>
 
-                <select size="1" name="state" form="task_states" id="state">
+            <button id="set_state" class="float-left submit-button cool_button" style="width: 85px" disabled>state:</button>
+            <select size="1" name="state" form="task_states" id="state" onchange="checkStateSelected()">
                     <%for (TaskStatesEnum state : TaskStatesEnum.values()){
-                        if (!state.getState().equals(task.getState())) {
+                        if (state.getState().equals(task.getState())) {
+                    %>
+                    <option selected><%= state.getState()%></option>
+                    <%
+                            } else {
                     %>
                     <option><%= state.getState()%></option>
                     <%
                             }
                         }%>
                 </select>
-                <button class="float-left submit-button cool_button">set state</button>
+                <script>
+                    function checkStateSelected() {
+                        var chosen = document.getElementById("state").value;
+                        var current = '<%= task.getState()%>';
+
+                        if (chosen !== current){
+                            document.getElementById("set_state").disabled = false;
+                            document.getElementById("set_state").innerHTML = "change";
+                        }
+                    }
+                    </script>
          </form>
         <br>
-        <span style="font-size: 12px; color: #043509; font-family: 'Tahoma';">
-                assigned on: </span><span style="font-size: 14px; font-family: 'Tahoma';"><%= task.getAssign().getFirstName()
-            + " " + task.getAssign().getLastName()
-            + " (" + task.getAssign().getRole().getRoleName() + ")"%></span>
+
         <form id="assigns" method="post" action="set_assign">
             <input type="text" name="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
             <input type="text" name="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
             <input type="text" name="task_id" value="<%= task.getId()%>" hidden>
 
-            <select size="1" name="new_assign" form="assigns" id="new_assign">
+            <button id="set_assign" class="float-left submit-button cool_button" style="width: 85px" disabled>assign:</button>
+            <select size="1" name="new_assign" form="assigns" id="new_assign" onchange="checkAssignSelected()">
                 <%
                     Map<String, String> orgUsers = (Map<String, String>)request.getAttribute("org_users");
+                    String currentAssign = "";
                     if (orgUsers.size() > 0) {
                         for (String userId : orgUsers.keySet()){
-                            if (!task.getAssign().getUserId().equals(userId)) {
+                            if (task.getAssign().getUserId().equals(userId)) {
+                                currentAssign = orgUsers.get(userId);
+                %>
+                <option selected><%= orgUsers.get(userId)%></option>
+                <%
+                            } else {
                 %>
                 <option value="<%= userId%>"><%= orgUsers.get(userId)%></option>
                 <%
@@ -106,7 +123,17 @@
                         }
                     }%>
             </select>
-            <button class="float-left submit-button cool_button">assign</button>
+            <script>
+                function checkAssignSelected() {
+                    var chosen = document.getElementById("new_assign").value;
+                    var current = '<%= currentAssign%>';
+
+                    if (chosen !== current){
+                        document.getElementById("set_assign").disabled = false;
+                        document.getElementById("set_assign").innerHTML = "change";
+                    }
+                }
+            </script>
         </form>
 
         <br>
