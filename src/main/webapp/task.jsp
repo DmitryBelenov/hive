@@ -41,7 +41,7 @@
             <span class="header">&nbsp;Hive</span>
             <img style="width:1.2%" src="resources/logo.png">
             <span class="header"><%
-                out.println(request.getAttribute("org_name") + "/ " + task.getHeadLine().split(":")[0]);
+                out.println(request.getAttribute("org_name") + " / " + task.getHeadLine().split(":")[0]);
             %></span>
         </h1>
     </div>

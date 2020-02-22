@@ -4,6 +4,14 @@
 <head>
     <title>Hive | Settings</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="jquery/jquery-3.4.1.js" type="text/javascript"></script>
+    <style type="text/css">
+        #user_settings_block {
+            width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+    </style>
 </head>
 <%
     OrgUser user = (OrgUser) request.getAttribute("user");
@@ -23,13 +31,9 @@
     </div>
     <br>
     <span style="font-size: 24px; color: #7B5427; font-family: 'Tahoma';">
-        <%= orgName%>
+        <%= user.getFirstName() + " " + user.getLastName()%>
         </span>
-    <br><br><br>
-    <p>
-        Здесь разные настройки пользователя
-    </p>
-    <br><br><br>
+    <br><br>
     <form method="post" action="main">
         <input type="text" name="type" value="user" hidden>
         <input type="text" name="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
@@ -38,7 +42,28 @@
 
         <button class="float-left submit-button cool_button">Main</button>
     </form>
-    <div id="footer">&copy; 2020</div>
+    <div id="user_settings_block" style="text-align: left;">
+        <br><br>
+        <span style="font-size: 18px; color: #043509; font-family: 'Tahoma';">
+        Password change
+        </span>
+        <hr>
+        <form>
+            <input type="text" name="user_uuid" value="<%= user.getUserId()%>" hidden>
+            password:<br><input type="password" name="password" placeholder="max 50" maxlength="50" id="password" style="text-align: center">
+            <br>
+            new password:<br><input type="password" name="new_password" placeholder="max 50" maxlength="50" id="new_password" style="text-align: center">
+            <br>
+            new password confirm:<br><input type="password" name="new_password_confirm" placeholder="max 50" maxlength="50" id="new_password_confirm" style="text-align: center">
+            <br><br>
+            <button class="cool_button" onclick="">Change</button>
+        </form>
+
+
+
+
+    </div>
 </div>
+<div id="footer">&copy; 2020</div>
 </body>
 </html>
