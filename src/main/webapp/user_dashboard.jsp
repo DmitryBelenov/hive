@@ -43,8 +43,8 @@
         </h1>
     </div>
     <br>
-    <span style="font-size: 12px; font-style: normal; color: #7B5427; font-family: 'Tahoma';">
-     <fieldset class="dashboard_block_style_large">
+    <span style="font-size: 12px; font-family: 'Century Gothic';">
+     <fieldset class="dashboard_block_style_large" style=" border-radius: 3px">
             <legend>My task list</legend>
 
         <form name="main_actions_form" method="post" action="main_panel_action">
@@ -122,13 +122,23 @@
 
      </fieldset>
      <br>
-     <fieldset class="dashboard_block_style_task">
+     <fieldset class="dashboard_block_style_task" style=" border-radius: 3px">
             <legend>Task Stream</legend>
          <div class="scroll_block_task_general">
             <%
                 if (taskList.size() > 0) {
             %>
              <table>
+                  <%--<thead>--%>
+                        <%--<tr>--%>
+                            <%--<th>priority</th>--%>
+                            <%--<th>state</th>--%>
+                            <%--<th>description</th>--%>
+                            <%--<th>assign</th>--%>
+                            <%--<th>deadline</th>--%>
+                        <%--</tr>--%>
+                   <%--</thead>--%>
+               <tbody>
              <%
                  String deadlineColor;
                  for (Task task : taskList) {
@@ -149,7 +159,7 @@
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
                          <%= task.getAssign().getFirstName() + " " + task.getAssign().getLastName() + " (" + task.getAssign().getRole().getRoleName() + ")"%></span></td>
                  <td><span style="font-size: 12px; color: <%= deadlineColor%>; font-family: 'Tahoma';">
-                         dl: <%= new SimpleDateFormat("dd:MM:yyyy").format(task.getDeadLine())%></span></td>
+                         <%= new SimpleDateFormat("dd:MM:yyyy").format(task.getDeadLine())%></span></td>
                  <td valign="top" align="center" width="50"><button
                          class="float-left submit-button cool_button">open</button></td>
               </form>
@@ -158,6 +168,7 @@
                  }
                }
              %>
+              </tbody>
              </table>
              <%
              } else {
@@ -170,7 +181,7 @@
         </div>
      </fieldset>
      <br>
-     <fieldset class="dashboard_block_style_event_short">
+     <fieldset class="dashboard_block_style_event_short" style=" border-radius: 3px">
             <legend>Events</legend>
          <div class="scroll_block_events_short">
             <!-- events -->

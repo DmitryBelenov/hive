@@ -180,6 +180,31 @@ public class DBUtils {
         return orgUser;
     }
 
+    public String getUserPassBase64ById(String userId, String orgId){
+        String passBase64 = null;
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT user_password FROM org_users WHERE user_uuid='"+userId+"' and org_uuid='"+orgId+"' and user_confirmed=true");
+            if (rs.next()){
+                passBase64 = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения пароля пользователя в кодировке Base64: " + e);
+        }
+        return passBase64;
+    }
+
+    public boolean updateUserPassBase64ById(String userId, String orgId, String newPassBase64){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("update org_users set user_password='"+newPassBase64+"' where user_uuid='"+userId+"' and org_uuid='"+orgId+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка обновления пароля пользователя: " + e);
+            return false;
+        }
+        return true;
+    }
+
     public OrgUser getOrgUserByLoginPassPrefix(String login, String pass, String prefix){
         OrgUser orgUser = null;
         try {

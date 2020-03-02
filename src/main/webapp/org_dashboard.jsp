@@ -47,7 +47,7 @@
     <input type="text" name="uuid" id="uuid" hidden>
 
     <span style="font-size: 12px; font-style: normal; color: #7B5427; font-family: 'Tahoma';">
-     <fieldset class="dashboard_block_style_small">
+     <fieldset class="dashboard_block_style_small" style=" border-radius: 3px">
             <legend>Administration</legend>
 
         <form name="main_actions_form" method="post" action="main_panel_action">
@@ -87,7 +87,7 @@
 
      </fieldset>
      <br>
-     <fieldset class="dashboard_block_style_task">
+     <fieldset class="dashboard_block_style_task" style=" border-radius: 3px">
             <legend>Task Stream</legend>
          <div class="scroll_block_task_general">
             <%if (taskList.size() > 0) {
@@ -128,7 +128,7 @@
         </div>
      </fieldset>
      <br>
-     <fieldset class="dashboard_block_style_event">
+     <fieldset class="dashboard_block_style_event" style=" border-radius: 3px">
             <legend>Events</legend>
          <div class="scroll_block_events">
             <!-- events -->

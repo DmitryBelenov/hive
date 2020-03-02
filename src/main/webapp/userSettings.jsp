@@ -5,6 +5,51 @@
     <title>Hive | Settings</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="jquery/jquery-3.4.1.js" type="text/javascript"></script>
+    <script>
+        function changePassword(user, org) {
+            var password = document.getElementById("password").value;
+            var new_password = document.getElementById("new_password").value;
+            var new_password_confirm = document.getElementById("new_password_confirm").value;
+
+            if (password === "" || new_password === "" || new_password_confirm === "")
+            {
+                alert("Для смены пароля необходимо заполнить все поля");
+            } else {
+                if (new_password !== new_password_confirm){
+                    alert("Пароли не совпадают");
+                } else {
+                    if (password === new_password) {
+                        alert("Новый пароль должен отличаться от старого");
+                    } else {
+                        if (window.confirm("Вы уверены что хотите изменить пароль?")) {
+
+                            var json =
+                                {
+                                    user: user,
+                                    org: org,
+                                    password: password,
+                                    new_password: new_password
+                                };
+
+                            $.ajax({
+                                url: "passwordChange",
+                                type: "POST",
+                                data: json,
+                                dataType: "text",
+                                error: function (msg) {
+                                    alert("Ошибка сервера:\n" + msg);
+                                },
+                                success: function (msg) {
+                                    alert(msg);
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style type="text/css">
         #user_settings_block {
             width: 500px;
@@ -13,6 +58,7 @@
         }
     </style>
 </head>
+
 <%
     OrgUser user = (OrgUser) request.getAttribute("user");
 %>
@@ -48,16 +94,18 @@
         Password change
         </span>
         <hr>
-        <form>
+        <%--<form>--%>
+            <span style="font-size: 14px; color: #043509; font-family: 'Tahoma';">
             <input type="text" name="user_uuid" value="<%= user.getUserId()%>" hidden>
-            password:<br><input type="password" name="password" placeholder="max 50" maxlength="50" id="password" style="text-align: center">
+            password:<br><input type="password" name="password" maxlength="50" id="password" style="text-align: center; border-radius: 4px">
             <br>
-            new password:<br><input type="password" name="new_password" placeholder="max 50" maxlength="50" id="new_password" style="text-align: center">
+            new password:<br><input type="password" name="new_password" maxlength="50" id="new_password" style="text-align: center; border-radius: 4px">
             <br>
-            new password confirm:<br><input type="password" name="new_password_confirm" placeholder="max 50" maxlength="50" id="new_password_confirm" style="text-align: center">
+            new password confirm:<br><input type="password" name="new_password_confirm" maxlength="50" id="new_password_confirm" style="text-align: center; border-radius: 4px">
+            </span>
             <br><br>
-            <button class="cool_button" onclick="">Change</button>
-        </form>
+            <button class="cool_button" onclick="changePassword('<%= user.getUserId()%>', '<%= user.getOrgId()%>')">Change</button>
+        <%--</form>--%>
 
 
 
