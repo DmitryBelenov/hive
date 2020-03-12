@@ -33,6 +33,12 @@ public enum RolesEnum {
             Action.TASK_EDIT,
             Action.ADD_ATTACHMENTS)),
 
+    Support("Support", Arrays.asList(Action.TASK_CREATE,
+            Action.TASK_EDIT,
+            Action.ADD_ATTACHMENTS,
+            Action.EVENT_CREATE,
+            Action.MANAGE_APPEALS)),
+
     Customer("Customer", Collections.singletonList(Action.CONTENT_VIEW));
 
     public Role role;

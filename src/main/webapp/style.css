@@ -62,6 +62,14 @@
     font-size: 12px;
 }
 
+.appeals_list_block_style{
+    width:770px;
+    height:350px;
+    margin: 0 auto;
+    border: 1px solid;
+    font-size: 12px;
+}
+
 .cool_button {
     display: inline-block;
     font-family: "Tahoma";
@@ -128,4 +136,12 @@
     height: 250px;
     padding: 5px;
     border: solid 1px #998f7a;
+}
+
+.scroll_block_appeals {
+    overflow: scroll; /* Полосы прокрутки */
+    width: 760px; /* Ширина блока */
+    height: 325px; /* Высота блока */
+    padding: 5px; /* Поля вокруг текста */
+    border: solid 1px #998f7a; /* Параметры рамки */
 }

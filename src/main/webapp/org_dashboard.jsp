@@ -75,6 +75,13 @@
                      onclick="{document.main_actions_form.action.value=this.value;
                        document.main_actions_form.submit();}" />
              </span>
+             &nbsp;&nbsp;&nbsp;
+             <span style="font-size: 12px; font-family: 'Tahoma';">
+              <img style="width:2.8%" src="resources/appeals.png">
+               <input type="button" name="appeals" value="appeals" class="cool_button"
+                      onclick="{document.main_actions_form.action.value=this.value;
+                       document.main_actions_form.submit();}"/>
+             </span>
               &nbsp;&nbsp;&nbsp;
              <span style="font-size: 12px; font-family: 'Tahoma';">
               <img style="width:2.5%" src="resources/settings.png">
@@ -103,14 +110,14 @@
              <input type="hidden" name="task_id" value="<%= task.getId()%>"/>
              <input type="hidden" name="org_uuid" value="<%= org_uuid%>"/>
 
-             <td valign="top" align="center" width="30"><img style="height: 100%" src="resources/<%= task.getPriority()%>.jpg"></td>
-             <td valign="top" align="center" width="40"><span style="font-size: 12px; color: #043509; font-family: 'Tahoma'; font-weight: bold"><%= task.getState()%></span></td>
+             <td align="center" width="30"><img style="height: 100%" src="resources/<%= task.getPriority()%>.jpg"></td>
+             <td align="center" width="40"><span style="font-size: 12px; color: #043509; font-family: 'Tahoma'; font-weight: bold"><%= task.getState()%></span></td>
              <td><span style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
                          <%= task.getAssign().getFirstName() + " " + task.getAssign().getLastName() + " ("+ task.getAssign().getRole().getRoleName()+")"%></span></td>
                  <td><span style="font-size: 12px; color: <%= deadlineColor%>; font-family: 'Tahoma';">
                          dl: <%= new SimpleDateFormat("dd:MM:yyyy").format(task.getDeadLine())%></span></td>
-                 <td valign="top" align="center" width="50"><button class="float-left submit-button cool_button">open</button></td>
+                 <td align="center" width="50"><button class="float-left submit-button cool_button">open</button></td>
               </form>
              </tr>
              <%

@@ -5,6 +5,9 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="ru.utils.Utils" %>
+<%@ page import="java.util.Arrays" %>
+<%@ page import="ru.objects.actions.Action" %>
+<%@ page import="ru.objects.roles.RolesEnum" %>
 <%@page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -68,6 +71,16 @@
                      onclick="{document.main_actions_form.action.value=this.value;
                        document.main_actions_form.submit();}"/>
              </span>
+             <% if (Arrays.asList(RolesEnum.Manager.getRoleName(),
+                     RolesEnum.Support.getRoleName()).contains(orgUser.getRole().getRoleName())) { %>
+              &nbsp;&nbsp;&nbsp;
+             <span style="font-size: 12px; font-family: 'Tahoma';">
+              <img style="width:2.8%" src="resources/appeals.png">
+               <input type="button" name="appeals" value="appeals" class="cool_button"
+                      onclick="{document.main_actions_form.action.value=this.value;
+                       document.main_actions_form.submit();}"/>
+             </span>
+             <% }%>
               &nbsp;&nbsp;&nbsp;
              <span style="font-size: 12px; font-family: 'Tahoma';">
               <img style="width:2.5%" src="resources/settings.png">
@@ -129,15 +142,6 @@
                 if (taskList.size() > 0) {
             %>
              <table>
-                  <%--<thead>--%>
-                        <%--<tr>--%>
-                            <%--<th>priority</th>--%>
-                            <%--<th>state</th>--%>
-                            <%--<th>description</th>--%>
-                            <%--<th>assign</th>--%>
-                            <%--<th>deadline</th>--%>
-                        <%--</tr>--%>
-                   <%--</thead>--%>
                <tbody>
              <%
                  String deadlineColor;
@@ -151,16 +155,16 @@
              <input type="hidden" name="org_uuid" value="<%= orgUser.getOrgId()%>"/>
              <input type="hidden" name="user_uuid" value="<%= orgUser.getUserId()%>"/>
 
-             <td valign="top" align="center" width="30"><img style="height: 100%"
+             <td align="center" width="30" style="color: #ecf5e4"><img style="height: 100%"
                                                              src="resources/<%= task.getPriority()%>.jpg"></td>
-             <td valign="top" align="center" width="40"><span style="font-size: 12px; color: #043509; font-family: 'Tahoma'; font-weight: bold"><%= task.getState()%></span></td>
+             <td align="center" width="40"><span style="font-size: 12px; color: #043509; font-family: 'Tahoma'; font-weight: bold"><%= task.getState()%></span></td>
              <td><span
                      style="font-size: 14px; color: #043509; font-family: 'Tahoma';"><%= task.getHeadLine()%></span></td>
                  <td><span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
                          <%= task.getAssign().getFirstName() + " " + task.getAssign().getLastName() + " (" + task.getAssign().getRole().getRoleName() + ")"%></span></td>
                  <td><span style="font-size: 12px; color: <%= deadlineColor%>; font-family: 'Tahoma';">
                          <%= new SimpleDateFormat("dd:MM:yyyy").format(task.getDeadLine())%></span></td>
-                 <td valign="top" align="center" width="50"><button
+                 <td align="center" width="50"><button
                          class="float-left submit-button cool_button">open</button></td>
               </form>
              </tr>

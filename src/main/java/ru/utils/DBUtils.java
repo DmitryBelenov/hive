@@ -144,7 +144,7 @@ public class DBUtils {
         Map<String, String> orgUsers = new LinkedHashMap<>();
         try {
             Statement s = connection.createStatement();
-            ResultSet rs = s.executeQuery("SELECT user_uuid, first_name, last_name, user_role FROM org_users WHERE org_uuid='"+org_id+"' order by last_name desc;");
+            ResultSet rs = s.executeQuery("SELECT user_uuid, first_name, last_name, user_role FROM org_users WHERE org_uuid='"+org_id+"' and user_confirmed=true order by last_name desc;");
             while (rs.next()){
                 orgUsers.put(rs.getString(1), rs.getString(2) +" "+ rs.getString(3) +" ("+ rs.getString(4)+")");
             }
@@ -429,7 +429,7 @@ public class DBUtils {
     public void setTaskAssignById(String taskId, String newAssignId){
         try {
             Statement s = connection.createStatement();
-            s.executeUpdate("update task set assign_id='"+newAssignId+"' where task_id='"+taskId+"'");
+            s.executeUpdate("update task set assign_id='"+newAssignId+"', state='"+TaskStatesEnum.opened.getState()+"' where task_id='"+taskId+"'");
         } catch (SQLException e) {
             System.out.println("Ошибка переназначения задачи на пользователя: " + e);
         }

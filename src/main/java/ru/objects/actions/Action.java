@@ -11,4 +11,5 @@ public abstract class Action {
     public static final String EVENT_EDIT = "event_edit";
     public static final String CONTENT_VIEW = "content_view";
     public static final String ADD_ATTACHMENTS = "add_attachments";
+    public static final String MANAGE_APPEALS = "manage_appeals";
 }

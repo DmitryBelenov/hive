@@ -15,7 +15,7 @@ public class SetStateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String state = req.getParameter("state");
+        String state = req.getParameter("new_state");
         String taskId = req.getParameter("task_id");
         String orgId = req.getParameter("org_uuid");
         String userId = req.getParameter("user_uuid");

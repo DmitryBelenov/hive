@@ -34,7 +34,21 @@
     Task task = (Task) request.getAttribute("task");
 %>
 
-<body>
+<body onload="setAvailabilityOfFieldsChange()">
+<script>
+    function setAvailabilityOfFieldsChange() {
+        var state = document.getElementById("new_state");
+        var assign = document.getElementById("new_assign");
+
+        var task_assign = '<%= task.getAssign().getUserId()%>';
+        var current_user = '<%= request.getAttribute("user_uuid")%>';
+
+        if (task_assign !== current_user) {
+            state.setAttribute("disabled", "true");
+            assign.setAttribute("disabled", "true");
+        }
+    }
+</script>
 <div style="text-align: left;">
     <div id="header" style="text-align: left">
         <h1>
@@ -64,14 +78,14 @@
 
         <span
             style="font-size: 12px; color: #043509; font-family: 'Tahoma';">priority: </span><span style="font-size: 14px; font-family: 'Tahoma';"><%= task.getPriority()%></span>
-        <img style="width: 2%; height: 1%" src="resources/<%= task.getPriority()%>.jpg">&nbsp;&nbsp;
+        <img style="width: 2%; height: 1%" src="resources/task/<%= task.getPriority()%>.jpg">&nbsp;&nbsp;
         <form id="task_states" method="post" action="set_state">
             <input type="text" name="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
             <input type="text" name="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
             <input type="text" name="task_id" value="<%= task.getId()%>" hidden>
 
             <button id="set_state" class="float-left submit-button cool_button" style="width: 85px" disabled>state:</button>
-            <select size="1" name="state" form="task_states" id="state" onchange="checkStateSelected()">
+            <select size="1" name="new_state" form="task_states" id="new_state" onchange="checkStateSelected()">
                     <%for (TaskStatesEnum state : TaskStatesEnum.values()){
                         if (state.getState().equals(task.getState())) {
                     %>
@@ -86,7 +100,7 @@
                 </select>
                 <script>
                     function checkStateSelected() {
-                        var chosen = document.getElementById("state").value;
+                        var chosen = document.getElementById("new_state").value;
                         var current = '<%= task.getState()%>';
 
                         if (chosen !== current){

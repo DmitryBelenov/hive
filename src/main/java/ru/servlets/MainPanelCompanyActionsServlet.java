@@ -1,6 +1,7 @@
 package ru.servlets;
 
 import ru.objects.OrgUser;
+import ru.objects.appeals.Appeal;
 import ru.utils.DBUtils;
 
 import javax.servlet.RequestDispatcher;
@@ -10,43 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "MainPanelCompanyActionsServlet", urlPatterns = "/main_panel_action")
 public class MainPanelCompanyActionsServlet extends HttpServlet {
-
-    protected enum ActionsEnum{
-        user("new_user", "addUser.jsp"),
-        taskUser("task", "addTaskUser.jsp"),
-        task("new_task", "addTask.jsp"),
-        event("new_event", "addEvent.jsp"),
-        userEvent("event", "addEventUser.jsp"),
-        settings("company_settings", "companySettings.jsp"),
-        userSettings("settings", "userSettings.jsp");
-
-        public String action;
-        public String page;
-
-        ActionsEnum(String action, String page){
-            this.action = action;
-            this.page = page;
-        }
-
-        public String getAction() {
-            return action;
-        }
-
-        public String getPage() {
-            return page;
-        }
-
-        protected static String getPageByAction(String action){
-            for (ActionsEnum e : ActionsEnum.values()){
-                if (e.getAction().equals(action)) return e.getPage();
-            }
-            return null;
-        }
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -65,21 +36,62 @@ public class MainPanelCompanyActionsServlet extends HttpServlet {
 
         if (page != null) {
             DBUtils db = new DBUtils();
-            if (ActionsEnum.task.getAction().equals(action) || ActionsEnum.taskUser.getAction().equals(action)){
+            if (Arrays.asList(ActionsEnum.task.getAction(),
+                    ActionsEnum.taskUser.getAction(),
+                    ActionsEnum.appeals.getAction()).contains(action)) {
                 Map<String, String> orgUsersMap = db.getOrgUsersMap(org_uuid);
 
                 req.setAttribute("org_users", orgUsersMap);
             }
 
-            if (ActionsEnum.userSettings.getAction().equals(action)){
+            if (ActionsEnum.userSettings.getAction().equals(action)) {
                 OrgUser orgUser = db.getOrgUserById(user_uuid);
                 req.setAttribute("user", orgUser);
+            }
+
+            if (ActionsEnum.appeals.getAction().equals(action)) {
+                List<Appeal> appeals = new ArrayList<>(); // пока заглушка
+                req.setAttribute("appeals", appeals);
             }
 
             RequestDispatcher view = req.getRequestDispatcher(page);
             view.forward(req, resp);
 
             db.connectionClose();
+        }
+    }
+
+    protected enum ActionsEnum {
+        user("new_user", "addUser.jsp"),
+        taskUser("task", "addTaskUser.jsp"),
+        task("new_task", "addTask.jsp"),
+        event("new_event", "addEvent.jsp"),
+        userEvent("event", "addEventUser.jsp"),
+        settings("company_settings", "companySettings.jsp"),
+        userSettings("settings", "userSettings.jsp"),
+        appeals("appeals", "appeals.jsp");
+
+        public String action;
+        public String page;
+
+        ActionsEnum(String action, String page) {
+            this.action = action;
+            this.page = page;
+        }
+
+        protected static String getPageByAction(String action) {
+            for (ActionsEnum e : ActionsEnum.values()) {
+                if (e.getAction().equals(action)) return e.getPage();
+            }
+            return null;
+        }
+
+        public String getAction() {
+            return action;
+        }
+
+        public String getPage() {
+            return page;
         }
     }
 }
