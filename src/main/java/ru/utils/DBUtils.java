@@ -3,6 +3,8 @@ package ru.utils;
 import ru.objects.OrgUser;
 import ru.objects.Task;
 import ru.objects.TaskComment;
+import ru.objects.appeals.Appeal;
+import ru.objects.appeals.AppealsStatesEnum;
 import ru.objects.roles.RolesEnum;
 import ru.objects.roles.TaskStatesEnum;
 
@@ -558,6 +560,87 @@ public class DBUtils {
         } catch (SQLException e) {
             System.out.println("Ошибка внесения записи в таблицу task: " + e);
         }
+    }
+
+    public void addNewAppeal(Appeal appeal){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("INSERT INTO appeals (appeal_id, " +
+                    "priority_level, " +
+                    "appeal_number, " +
+                    "create_date, " +
+                    "appeal_content, " +
+                    "sender_org_name, " +
+                    "sender_name, " +
+                    "sender_mail, " +
+                    "appeal_state, " +
+                    "performer_id, " +
+                    "appeal_comment, " +
+                    "attachment_line, " +
+                    "org_id) " +
+                    "VALUES ('"+appeal.getAppealId()
+                    +"','"+appeal.getPriorityLevel()
+                    +"','"+appeal.getAppealNumber()
+                    +"', current_timestamp"
+                    +",'"+appeal.getAppealContent()
+                    +"','"+appeal.getSenderOrgName()
+                    +"','"+appeal.getSenderName()
+                    +"','"+appeal.getSenderMail()
+                    +"','"+ AppealsStatesEnum.IN_WORK.getState()
+                    +"','"+appeal.getPerformer().getUserId()
+                    +"','"+appeal.getCreatorsComment()
+                    +"','"+appeal.getAttachmentLine()
+                    +"','"+appeal.getOrgId() +"')");
+        } catch (SQLException e) {
+            System.out.println("Ошибка внесения записи в таблицу appeals: " + e);
+        }
+    }
+
+    public List<Appeal> getAppealsList(String orgId){
+        List<Appeal> appealsList = new LinkedList<>();
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT appeal_id, " +
+                    "priority_level, " +
+                    "appeal_number, " +
+                    "create_date, " +
+                    "appeal_content, " +
+                    "sender_org_name, " +
+                    "sender_name, " +
+                    "sender_mail, " +
+                    "appeal_state, " +
+                    "performer_id, " +
+                    "appeal_comment, " +
+                    "attachment_line, " +
+                    "org_id) " +
+                    " FROM appeals WHERE org_id='"+orgId+"' order by create_date desc LIMIT 1000");
+
+            while (rs.next()){
+                Appeal appeal = new Appeal();
+                appeal.setAppealId(rs.getString(1));
+                appeal.setPriorityLevel(rs.getString(2));
+                appeal.setAppealNumber(rs.getString(3));
+                appeal.setAppealRegDate(rs.getTimestamp(4));
+                appeal.setAppealContent(rs.getString(5));
+                appeal.setSenderOrgName(rs.getString(6));
+                appeal.setSenderName(rs.getString(7));
+                appeal.setSenderMail(rs.getString(8));
+                appeal.setAppealState(rs.getString(9));
+
+                String performerId = rs.getString(10);
+                OrgUser performer = this.getOrgUserById(performerId);
+
+                appeal.setPerformer(performer);
+                appeal.setCreatorsComment( rs.getString(11));
+                appeal.setAttachmentLine( rs.getString(12));
+                appeal.setOrgId( rs.getString(13));
+
+                appealsList.add(appeal);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения списка заявок организации: " + e);
+        }
+        return appealsList;
     }
 
     public void deleteOrgEmail(String email){

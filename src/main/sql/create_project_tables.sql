@@ -57,5 +57,19 @@ CREATE TABLE task_prefix (
    create_date timestamp not null
 );
 
-
+-- заявки
+CREATE TABLE appeals (
+   appeal_id VARCHAR (255) not null,
+   priority_level VARCHAR (5) not null,
+   appeal_number VARCHAR (50) not null,
+   create_date timestamp not null,
+   appeal_content VARCHAR (5000) not null,
+   sender_org_name VARCHAR (255) not null,
+   sender_name VARCHAR (255),
+   sender_mail VARCHAR (255) not null,
+   appeal_state VARCHAR (255) not null,
+   performer_id VARCHAR (255) not null,
+   appeal_comment VARCHAR (1000),
+   attachment_line VARCHAR (3000)
+);
 

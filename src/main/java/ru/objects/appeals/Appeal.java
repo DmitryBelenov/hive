@@ -7,6 +7,7 @@ import java.util.Date;
 public class Appeal {
 
     private String appealId;
+    private String orgId;
     private String priorityLevel;
     private String appealNumber;
     private Date appealRegDate;
@@ -19,8 +20,17 @@ public class Appeal {
     private String creatorsComment;
     private String attachmentLine;
 
+
     public String getAppealId() {
         return appealId;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public void setAppealId(String appealId) {

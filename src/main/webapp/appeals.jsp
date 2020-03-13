@@ -50,7 +50,7 @@
             <br>
             Комментарий:<br><textarea rows="2" cols="110" name="appeal_comment" id="appeal_comment" maxlength="1000" style="resize: none"></textarea>
             <br>
-            Название организации:<br><input type="text" name="org_name" id="org_name" maxlength="255" style="text-align: center" size="33">
+            Название организации:<br><input type="text" name="customer_org_name" id="customer_org_name" maxlength="255" style="text-align: center" size="33">
             <br>
             Имя заказчика:<br><input type="text" name="customer_name" id="customer_name" maxlength="255" style="text-align: center" size="33">
             <br>
