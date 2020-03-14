@@ -106,12 +106,36 @@ public class DBUtils {
         return "HV0";
     }
 
+    public String getLastAppealPrefix(String org_uuid){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT prefix FROM appeal_prefix WHERE org_uuid='"+org_uuid+"' ORDER by create_date desc");
+            if (rs.next()){
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения последнего префикса заявки: " + e);
+        }
+        return "AP0";
+    }
+
     public boolean addLastTaskPrefix(String org_uuid, String taskPrefix){
         try {
             Statement s = connection.createStatement();
             s.executeUpdate("INSERT INTO task_prefix (org_uuid, prefix, create_date) VALUES ('"+org_uuid+"','"+taskPrefix+"', current_timestamp)");
         } catch (SQLException e) {
             System.out.println("Ошибка внесения последнего префикса задачи: " + e);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean addLastAppealPrefix(String org_uuid, String appealPrefix){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("INSERT INTO appeal_prefix (org_uuid, prefix, create_date) VALUES ('"+org_uuid+"','"+appealPrefix+"', current_timestamp)");
+        } catch (SQLException e) {
+            System.out.println("Ошибка внесения последнего префикса заявки: " + e);
             return false;
         }
         return true;
@@ -612,7 +636,7 @@ public class DBUtils {
                     "performer_id, " +
                     "appeal_comment, " +
                     "attachment_line, " +
-                    "org_id) " +
+                    "org_id " +
                     " FROM appeals WHERE org_id='"+orgId+"' order by create_date desc LIMIT 1000");
 
             while (rs.next()){

@@ -73,3 +73,10 @@ CREATE TABLE appeals (
    attachment_line VARCHAR (3000)
 );
 
+-- префиксы заявок
+CREATE TABLE appeal_prefix (
+   org_uuid VARCHAR (255) not null,
+   prefix VARCHAR (255) not null,
+   create_date timestamp not null
+);
+

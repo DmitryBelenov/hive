@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +22,6 @@ public class MainPanelCompanyActionsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String action = req.getParameter("action");
 
         String org_uuid = req.getParameter("org_uuid");
@@ -50,7 +50,7 @@ public class MainPanelCompanyActionsServlet extends HttpServlet {
             }
 
             if (ActionsEnum.appeals.getAction().equals(action)) {
-                List<Appeal> appeals = new ArrayList<>(); // пока заглушка
+                List<Appeal> appeals = db.getAppealsList(org_uuid);
                 req.setAttribute("appeals", appeals);
             }
 

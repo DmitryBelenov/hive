@@ -64,7 +64,7 @@
 
 .appeals_list_block_style{
     width:770px;
-    height:350px;
+    height:380px;
     margin: 0 auto;
     border: 1px solid;
     font-size: 12px;
@@ -141,7 +141,7 @@
 .scroll_block_appeals {
     overflow: scroll; /* Полосы прокрутки */
     width: 760px; /* Ширина блока */
-    height: 325px; /* Высота блока */
+    height: 355px; /* Высота блока */
     padding: 5px; /* Поля вокруг текста */
     border: solid 1px #998f7a; /* Параметры рамки */
 }
