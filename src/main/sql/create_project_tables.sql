@@ -70,7 +70,8 @@ CREATE TABLE appeals (
    appeal_state VARCHAR (255) not null,
    performer_id VARCHAR (255) not null,
    appeal_comment VARCHAR (1000),
-   attachment_line VARCHAR (3000)
+   attachment_line VARCHAR (3000),
+   org_id VARCHAR (255) not null
 );
 
 -- префиксы заявок

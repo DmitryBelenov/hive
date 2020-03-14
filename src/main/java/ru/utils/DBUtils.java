@@ -620,6 +620,52 @@ public class DBUtils {
         }
     }
 
+    public Appeal getAppealById(String appealId){
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT appeal_id, " +
+                    "priority_level, " +
+                    "appeal_number, " +
+                    "create_date, " +
+                    "appeal_content, " +
+                    "sender_org_name, " +
+                    "sender_name, " +
+                    "sender_mail, " +
+                    "appeal_state, " +
+                    "performer_id, " +
+                    "appeal_comment, " +
+                    "attachment_line, " +
+                    "org_id " +
+                    " FROM appeals WHERE appeal_id='"+appealId+"'");
+
+            if (rs.next()){
+                Appeal appeal = new Appeal();
+                appeal.setAppealId(rs.getString(1));
+                appeal.setPriorityLevel(rs.getString(2));
+                appeal.setAppealNumber(rs.getString(3));
+                appeal.setAppealRegDate(rs.getTimestamp(4));
+                appeal.setAppealContent(rs.getString(5));
+                appeal.setSenderOrgName(rs.getString(6));
+                appeal.setSenderName(rs.getString(7));
+                appeal.setSenderMail(rs.getString(8));
+                appeal.setAppealState(rs.getString(9));
+
+                String performerId = rs.getString(10);
+                OrgUser performer = this.getOrgUserById(performerId);
+
+                appeal.setPerformer(performer);
+                appeal.setCreatorsComment( rs.getString(11));
+                appeal.setAttachmentLine( rs.getString(12));
+                appeal.setOrgId( rs.getString(13));
+
+                return appeal;
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения представления заявки: " + e);
+        }
+        return null;
+    }
+
     public List<Appeal> getAppealsList(String orgId){
         List<Appeal> appealsList = new LinkedList<>();
         try {
