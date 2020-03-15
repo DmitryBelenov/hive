@@ -32,6 +32,8 @@ public class AuthServlet extends HttpServlet {
 
         DBUtils db = new DBUtils();
 
+        resp.setCharacterEncoding("UTF-8");
+
         if (Utils.isNull(prefix) || prefix.isEmpty()) {
             if (!Authorization.auth(login, password, db)) {
                 req.setAttribute("org_name", login);

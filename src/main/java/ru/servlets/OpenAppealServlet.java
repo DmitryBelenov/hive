@@ -34,6 +34,8 @@ public class OpenAppealServlet extends HttpServlet {
         req.setAttribute("appeal", appeal);
         req.setAttribute("org_name", org_name);
 
+        resp.setCharacterEncoding("UTF-8");
+
         RequestDispatcher view = req.getRequestDispatcher("appeal.jsp");
         view.forward(req, resp);
 

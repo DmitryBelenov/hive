@@ -1,3 +1,12 @@
+-- создание базы данных и пользователя
+-- 1
+CREATE DATABASE hive;
+
+-- 2
+CREATE USER hiveadmin WITH PASSWORD '777';
+GRANT ALL PRIVILEGES ON DATABASE "hive" to hiveadmin;
+
+-- 3
 -- организации
 CREATE TABLE organizations (
    org_name VARCHAR (255) not null,
@@ -38,6 +47,7 @@ CREATE TABLE task (
    assign_id VARCHAR (255) not null,
    attachment_line VARCHAR (3000),
    create_date timestamp  not null,
+   state VARCHAR (100),
    priority VARCHAR (100) not null
 );
 
@@ -46,6 +56,7 @@ CREATE TABLE task_comments (
    org_id VARCHAR (255) not null,
    owner_id VARCHAR (255) not null,
    task_id VARCHAR (255) not null,
+   comment_id VARCHAR (255) not null,
    text_content VARCHAR (3000) not null,
    create_date timestamp
 );
@@ -81,3 +92,4 @@ CREATE TABLE appeal_prefix (
    create_date timestamp not null
 );
 
+commit;

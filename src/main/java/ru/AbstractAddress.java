@@ -1,7 +1,23 @@
 package ru;
 
 public class AbstractAddress {
-    public static String homeUrl = "http://localhost:8090/hive_war_exploded";
-//    public static String homeUrl = "http://192.168.1.64:8080/hive";
+    public static String homeUrl;
+    public static String dbUrl;
     public static String filesHome = System.getProperty("user.home")+"/AppData/Local/hive/files/";
+
+    public static String getHomeUrl() {
+        return homeUrl;
+    }
+
+    public static void setHomeUrl(String homeUrl) {
+        AbstractAddress.homeUrl = homeUrl;
+    }
+
+    public static String getDbUrl() {
+        return dbUrl;
+    }
+
+    public static void setDbUrl(String dbUrl) {
+        AbstractAddress.dbUrl = dbUrl;
+    }
 }

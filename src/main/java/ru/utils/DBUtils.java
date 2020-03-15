@@ -1,5 +1,6 @@
 package ru.utils;
 
+import ru.AbstractAddress;
 import ru.objects.OrgUser;
 import ru.objects.Task;
 import ru.objects.TaskComment;
@@ -15,8 +16,6 @@ import java.util.*;
 import java.util.Date;
 
 public class DBUtils {
-
-    private static final String dbUrl = "jdbc:postgresql:hive_db?user=postgres&password=123";
 
     private Connection connection;
 
@@ -36,7 +35,7 @@ public class DBUtils {
         Connection connection = null;
         try {
             Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(dbUrl);
+            connection = DriverManager.getConnection(AbstractAddress.dbUrl);
         } catch (Exception e) {
             System.out.println("Ошибка подключения к базе данных: " + e);
         }
@@ -544,8 +543,8 @@ public class DBUtils {
     public boolean insert(String... data){
         try {
             Statement s = connection.createStatement();
-            s.executeUpdate("INSERT INTO organizations (org_name, org_address, org_email, org_login, org_password, email_confirmed, confirmation_uuid, reg_date) " +
-                    "VALUES ('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"', false,'"+data[5]+"', current_timestamp)");
+            s.executeUpdate("INSERT INTO organizations (org_name, org_address, org_email, org_login, org_password, email_confirmed, confirmation_uuid, reg_date, org_prefix) " +
+                    "VALUES ('"+data[0]+"','"+data[1]+"','"+data[2]+"','"+data[3]+"','"+data[4]+"', false,'"+data[5]+"', current_timestamp, '"+data[6]+"')");
         } catch (SQLException e) {
             System.out.println("Ошибка внесения записи об организации в таблицу organizations: " + e);
             return false;

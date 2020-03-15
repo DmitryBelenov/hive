@@ -35,11 +35,11 @@
         <span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
         <fieldset style="width:300px; margin: 0 auto; border: 1px solid">
             <legend>Task</legend>
-        headline:<br><input type="text" name="headline" id="headline" maxlength="255" style="text-align: center" size="66">
+        headline:<br><input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-. ]+$" name="headline" id="headline" maxlength="255" style="text-align: center" size="66">
         <br><br>
-        description:<br><textarea rows="15" cols="67" name="description" id="description" maxlength="3000" style="resize: none"></textarea>
+        description:<br><textarea rows="15" cols="67" pattern="^[a-zA-Zа-яА-Я0-9,-.: ]+$" name="description" id="description" maxlength="3000" style="resize: none"></textarea>
         <br>
-        project:&nbsp;<input type="text" name="project" id="project" maxlength="255" style="text-align: left" size="30">&nbsp;
+        project:&nbsp;<input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-.: ]+$" name="project" id="project" maxlength="255" style="text-align: left" size="30">&nbsp;
         priority:&nbsp;<select size="1" name="priority" form="user_data" id="priority">
                         <option>low</option>
                         <option>medium</option>

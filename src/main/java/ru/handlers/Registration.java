@@ -67,7 +67,7 @@ public class Registration {
 
         String confirmation_uuid = UUID.randomUUID().toString();
 
-        boolean addOrg = ma.insert(name, address, email, login, passBase64, confirmation_uuid);
+        boolean addOrg = ma.insert(name, address, email, login, passBase64, confirmation_uuid, prefix);
 
         if (!addOrg) {
             message = "Server error, organization not registered.<br>Ask administrator please";

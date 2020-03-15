@@ -123,11 +123,11 @@
             <br>
             Комментарий:<br><textarea rows="2" cols="110" name="appeal_comment" id="appeal_comment" maxlength="1000" style="resize: none; border-radius: 3px"></textarea>
             <br>
-            Название организации:<br><input type="text" name="customer_org_name" id="customer_org_name" maxlength="255" style="text-align: center; border-radius: 3px" size="33">
+            Название организации:<br><input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-. ]+$" name="customer_org_name" id="customer_org_name" maxlength="255" style="text-align: center; border-radius: 3px" size="33">
             <br>
-            Имя заказчика:<br><input type="text" name="customer_name" id="customer_name" maxlength="255" style="text-align: center; border-radius: 3px" size="33">
+            Имя заказчика:<br><input type="text" pattern="^[a-zA-Zа-яА-Я ]+$" name="customer_name" id="customer_name" maxlength="255" style="text-align: center; border-radius: 3px" size="33">
             <br>
-            Почта заказчика:<br><input type="text" name="customer_mail" id="customer_mail" maxlength="255" style="text-align: center; border-radius: 3px" size="33">
+            Почта заказчика:<br><input type="text" pattern="^[a-zA-Z0-9,-_.@]+$" name="customer_mail" id="customer_mail" maxlength="255" style="text-align: center; border-radius: 3px" size="33">
             <br><br>
             Исполнитель:<br><select size="1" name="executor" form="new_appeal" id="executor" style="border-radius: 3px">
             <%
@@ -167,6 +167,12 @@
                         alert("Поля формы заявки не могут быть пустыми");
                         return false;
                     } else {
+                        var pattern = new RegExp("^[a-zA-Zа-яА-Я0-9,-. ]+$");
+                        if (!appeal_content.match(pattern) || !appeal_comment.match(pattern)){
+                            alert("В полях Содержание / Комментарий допустимы только символы (a-zA-Zа-яА-Я0-9,-. )");
+                            return false;
+                        }
+
                         return true;
                     }
                 }

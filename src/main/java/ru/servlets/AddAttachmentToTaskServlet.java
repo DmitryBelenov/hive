@@ -25,6 +25,8 @@ public class AddAttachmentToTaskServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
         String taskId = req.getParameter("task_id");
         String org_uuid = req.getParameter("org_uuid");
         String user_uuid = req.getParameter("user_uuid");

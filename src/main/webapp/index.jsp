@@ -6,8 +6,28 @@
     <meta charset="UTF-8">
     <title>Hive | Welcome</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="jquery/jquery-3.4.1.js" type="text/javascript"></script>
 </head>
-<body>
+<script>
+    function systemInit() {
+        $.ajax({
+            url: "systemInit",
+            type: "GET",
+            dataType: "text",
+            error: function (msg) {
+                alert("Ошибка сервера:\n" + msg);
+            },
+            success: function (msg) {
+                if (msg !== 'OK'){
+                    alert(msg);
+                }
+            }
+        });
+    }
+</script>
+
+
+<body onload="systemInit()">
 <div style="text-align: center;">
     <div id="header" style="text-align: left">
         <h1>
@@ -21,10 +41,10 @@
             <fieldset style="width:300px; margin: 0 auto; border: 1px solid; border-radius: 3px">
                 <legend>Authorization</legend>
             login:<br>
-            <input type="text" name="login" id="login" style="text-align: center; max-width: 158px; border-radius: 3px">
+            <input type="text" pattern="^[a-zA-Zа-яА-Я0-9]+$" name="login" id="login" style="text-align: center; max-width: 158px; border-radius: 3px">
             <br>
             password:<br>
-            <input type="text" name="prefix" id="prefix" placeholder="prefix" style="text-align: center; max-width: 60px; border-radius: 3px">&nbsp;<input type="password" name="pass" id="pass" style="text-align: center; max-width: 90px; border-radius: 3px">
+            <input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-.]+$" name="prefix" id="prefix" placeholder="prefix" style="text-align: center; max-width: 60px; border-radius: 3px">&nbsp;<input type="password" name="pass" id="pass" style="text-align: center; max-width: 90px; border-radius: 3px">
             <br><br>
             <button id="auth" class="float-left submit-button cool_button">Log In</button>
             <script type="text/javascript">

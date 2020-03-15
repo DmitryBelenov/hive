@@ -15,6 +15,8 @@ import java.util.Base64;
 public class ChangePasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+
         String result = "no results";
 
         String user_uuid = req.getParameter("user");

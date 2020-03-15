@@ -73,6 +73,8 @@ public class OpenTaskServlet extends HttpServlet {
             List<TaskComment> comments = db.getTaskCommentsById(taskId);
             task.setTaskComments(comments);
 
+            resp.setCharacterEncoding("UTF-8");
+
             RequestDispatcher view = req.getRequestDispatcher("task.jsp");
             view.forward(req, resp);
         } else {

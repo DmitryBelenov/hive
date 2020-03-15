@@ -21,21 +21,21 @@
         <fieldset style="width:300px; margin: 0 auto; border: 1px solid; border-radius: 3px">
             <legend>Company data</legend>
         name:<br>
-            <input type="text" name="name" id="name" maxlength="100"  style="text-align: center;  border-radius: 4px">
+            <input type="text" pattern="^[a-zA-Zа-яА-Я]+$" name="name" id="name" maxlength="100"  style="text-align: center;  border-radius: 4px">
         <br>
         address:<br>
-            <input type="text" name="address" id="address" maxlength="100"  style="text-align: center;  border-radius: 4px">
+            <input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-.: ]+$" name="address" id="address" maxlength="100"  style="text-align: center;  border-radius: 4px">
         <br>
         e-mail:<br>
-            <input type="text" name="email" id="email" maxlength="50"  style="text-align: center;  border-radius: 4px">
+            <input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-.@]+$" name="email" id="email" maxlength="50"  style="text-align: center;  border-radius: 4px">
         <br>
         prefix:<br>
-            <input type="text" name="prefix" id="prefix" maxlength="10"  style="text-align: center;  border-radius: 4px">
+            <input type="text" pattern="^[a-zA-Zа-яА-Я0-9]+$" name="prefix" id="prefix" maxlength="10"  style="text-align: center;  border-radius: 4px">
         <br>
         login:<br>
-            <input type="text" name="login" id="login" maxlength="50"  style="text-align: center;  border-radius: 4px">
+            <input type="text" pattern="^[a-zA-Zа-яА-Я0-9]+$" name="login" id="login" maxlength="50"  style="text-align: center;  border-radius: 4px">
         <br>
-        password:<br><input type="password" name="password" maxlength="50" id="pass" style="text-align: center;  border-radius: 4px">
+        password:<br><input type="password" pattern="^[a-zA-Zа-яА-Я0-9,-.]+$" name="password" maxlength="50" id="pass" style="text-align: center;  border-radius: 4px">
         <br>
         pass confirm:<br><input type="password" id="pass_confirm" maxlength="50" style="text-align: center;  border-radius: 4px">
         <br><br>
