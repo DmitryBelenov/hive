@@ -16,10 +16,10 @@ import java.util.Properties;
 public class SystemInitializationServlet extends HttpServlet {
 
     private final String propertiesPath = System.getProperty("user.home") + "/Hive";
-//    private final String propertiesFile = propertiesPath + "/hive.properties";
+    private final String propertiesFile = propertiesPath + "/hive.properties";
 
     // for test only!
-    private final String propertiesFile = System.getProperty("user.home") + "/Hive/hive_test.properties";
+//    private final String propertiesFile = System.getProperty("user.home") + "/Hive/hive_test.properties";
 
     private String dataBaseUrlFormat = "jdbc:postgresql:%s?user=%s&password=%s"; // hive_db / postgres / 123
 

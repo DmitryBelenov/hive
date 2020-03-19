@@ -293,6 +293,41 @@ public class DBUtils {
         return taskList;
     }
 
+    public List<Task> getShortOrgArchivedTaskList(String orgId){
+        List<Task> taskList = new LinkedList<>();
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT task_id, " +
+                    "creator_id, " +
+                    "head_line, " +
+                    "dead_line, " +
+                    "assign_id, " +
+                    "priority,  " +
+                    "state  " +
+                    " FROM task WHERE creator_org_id='"+orgId+"' and state='"+TaskStatesEnum.archived.getState()+"' order by create_date desc LIMIT 5000");
+
+            while (rs.next()){
+                Task task = new Task();
+
+                task.setId(rs.getString(1));
+                task.setCreatorId(rs.getString(2));
+                task.setHeadLine(rs.getString(3));
+                task.setDeadLine(rs.getDate(4));
+
+                String assignId = rs.getString(5);
+                OrgUser orgUser = this.getOrgUserById(assignId);
+                task.setAssign(orgUser);
+                task.setPriority(rs.getString(6));
+                task.setState(rs.getString(7));
+
+                taskList.add(task);
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка получения краткого представления списка задач организации: " + e);
+        }
+        return taskList;
+    }
+
     public List<Task> getUserShortTaskList(String userId){
         List<Task> taskList = new LinkedList<>();
         try {
@@ -392,6 +427,17 @@ public class DBUtils {
         } catch (SQLException e) {
             System.out.println("Ошибка обновления списка вложений задачи: " + e);
         }
+    }
+
+    public boolean changeTaskState(String taskId, String new_state){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("update task set state='"+new_state+"' WHERE task_id='"+taskId+"'");
+        } catch (SQLException e) {
+            System.out.println("Ошибка обновления статуса задачи задачи: " + e);
+            return false;
+        }
+        return true;
     }
 
     public List<TaskComment> getTaskCommentsById(String taskId){
@@ -663,6 +709,18 @@ public class DBUtils {
             System.out.println("Ошибка получения представления заявки: " + e);
         }
         return null;
+    }
+
+    public boolean saveAppealChanges(String appeal_id, String new_state, String new_priority, String new_comment){
+        try {
+            Statement s = connection.createStatement();
+            s.executeUpdate("update appeals set appeal_state='"+new_state+"', priority_level='"+new_priority+"', appeal_comment='"+new_comment+"' where appeal_id='"+appeal_id+"'");
+
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Ошибка сохранения изменений заявки: " + e);
+            return false;
+        }
     }
 
     public List<Appeal> getAppealsList(String orgId){

@@ -26,7 +26,7 @@
         </h1>
     </div>
     <br>
-    <form id="user_data" method="post" action="new_task" enctype="multipart/form-data">
+    <form id="user_data" method="post" action="" enctype="multipart/form-data">
         <input type="text" name="uuid" id="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
 
         <span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">

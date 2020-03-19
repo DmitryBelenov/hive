@@ -57,8 +57,9 @@
     <div id="appeals_block" style="text-align: left; font-size: 12px; color: #043509; font-family: 'Tahoma';">
         <span style="font-size: 20px; color: #043509; font-family: 'Tahoma';">Заявки технической поддержки</span>
         <hr>
+
         <!-- appeals table -->
-        <fieldset class="appeals_list_block_style" style=" border-radius: 3px">
+        <fieldset class="appeals_list_block_style" style=" border-radius: 3px;  background: #FFFFFF;">
             <legend>Журнал заявок</legend>
             <div class="scroll_block_appeals">
                 <%
@@ -107,7 +108,7 @@
                 } else {
                 %>
                 <span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
-             &nbsp;&nbsp;&nbsp;У организации пока нет задач :(
+             &nbsp;&nbsp;&nbsp;У организации пока нет заявок :(
               <span>
                       <%
             }%>
@@ -133,6 +134,9 @@
             <%
                 Map<String, String> orgUsers = (Map<String, String>)request.getAttribute("org_users");
                 if (orgUsers.size() > 0) {
+            %>
+            <option selected value="def">выбрать..</option>
+            <%
                     for (String userId : orgUsers.keySet()){
             %>
             <option value="<%= userId%>"><%= orgUsers.get(userId)%></option>
@@ -167,13 +171,20 @@
                         alert("Поля формы заявки не могут быть пустыми");
                         return false;
                     } else {
+                        var executor = document.getElementById("executor").value;
+
+                        if (executor === 'def') {
+                            alert("Необходимо выбрать исполнителя заявки");
+                            return false;
+                        } else {
                         var pattern = new RegExp("^[a-zA-Zа-яА-Я0-9,-. ]+$");
-                        if (!appeal_content.match(pattern) || !appeal_comment.match(pattern)){
+                        if (!appeal_content.match(pattern) || !appeal_comment.match(pattern)) {
                             alert("В полях Содержание / Комментарий допустимы только символы (a-zA-Zа-яА-Я0-9,-. )");
                             return false;
                         }
 
                         return true;
+                        }
                     }
                 }
             </script>

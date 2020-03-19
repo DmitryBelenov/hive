@@ -33,21 +33,21 @@
         <input type="text" name="user_uuid" id="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
 
         <span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
-        <fieldset style="width:300px; margin: 0 auto; border: 1px solid">
+        <fieldset style="width:300px; margin: 0 auto; border: 1px solid; border-radius: 3px">
             <legend>Task</legend>
-        headline:<br><input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-. ]+$" name="headline" id="headline" maxlength="255" style="text-align: center" size="66">
+        headline:<br><input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-. ]+$" name="headline" id="headline" maxlength="255" style="text-align: center; border-radius: 3px" size="66">
         <br><br>
-        description:<br><textarea rows="15" cols="67" pattern="^[a-zA-Zа-яА-Я0-9,-.: ]+$" name="description" id="description" maxlength="3000" style="resize: none"></textarea>
+        description:<br><textarea rows="15" cols="67" pattern="^[a-zA-Zа-яА-Я0-9,-.: ]+$" name="description" id="description" maxlength="3000" style="resize: none; border-radius: 3px"></textarea>
         <br>
-        project:&nbsp;<input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-.: ]+$" name="project" id="project" maxlength="255" style="text-align: left" size="30">&nbsp;
-        priority:&nbsp;<select size="1" name="priority" form="user_data" id="priority">
+        project:&nbsp;<input type="text" pattern="^[a-zA-Zа-яА-Я0-9,-.: ]+$" name="project" id="project" maxlength="255" style="text-align: left; border-radius: 3px" size="30">&nbsp;
+        priority:&nbsp;<select size="1" name="priority" form="user_data" id="priority" style="border-radius: 3px">
                         <option>low</option>
                         <option>medium</option>
                         <option>high</option>
 	                </select>
             <br><br>
-        deadline:&nbsp;<input type="date" name="deadline" id="deadline" max="2030-01-01">&nbsp;
-        assign to:&nbsp;<select size="1" name="assign" form="user_data" id="assign">
+        deadline:&nbsp;<input type="date" name="deadline" id="deadline" max="2030-01-01" style="border-radius: 3px">&nbsp;
+        assign to:&nbsp;<select size="1" name="assign" form="user_data" id="assign" style="border-radius: 3px">
             <%Map<String, String> orgUsers = (Map<String, String>)request.getAttribute("org_users");
                         if (orgUsers.size() > 0) {
                             for (String userId : orgUsers.keySet()){

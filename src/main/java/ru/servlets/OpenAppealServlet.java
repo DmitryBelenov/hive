@@ -2,6 +2,7 @@ package ru.servlets;
 
 import ru.objects.appeals.Appeal;
 import ru.utils.DBUtils;
+import ru.utils.Utils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,6 +34,8 @@ public class OpenAppealServlet extends HttpServlet {
 
         req.setAttribute("appeal", appeal);
         req.setAttribute("org_name", org_name);
+
+        req.setAttribute("type", Utils.isNull(user_uuid) ? DashboardRenderServlet.TypesEnum.organization : DashboardRenderServlet.TypesEnum.user);
 
         resp.setCharacterEncoding("UTF-8");
 

@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="ru.utils.Utils" %>
+<%@ page import="ru.objects.roles.TaskStatesEnum" %>
 <%@page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -69,20 +70,31 @@
                        document.main_actions_form.submit();}" />
              </span>
                &nbsp;&nbsp;&nbsp;
-             <span style="font-size: 12px; font-family: 'Tahoma';">
-              <img style="width:2.5%" src="resources/event.png">
-              <input type="button" name="event" value="new_event" class="cool_button"
-                     onclick="{document.main_actions_form.action.value=this.value;
-                       document.main_actions_form.submit();}" />
-             </span>
-             &nbsp;&nbsp;&nbsp;
+             <%--<span style="font-size: 12px; font-family: 'Tahoma';">--%>
+              <%--<img style="width:2.5%" src="resources/event.png">--%>
+              <%--<input type="button" name="event" value="new_event" class="cool_button"--%>
+                     <%--onclick="{document.main_actions_form.action.value=this.value;--%>
+                       <%--document.main_actions_form.submit();}" />--%>
+             <%--</span>--%>
+             <%--&nbsp;&nbsp;&nbsp;--%>
              <span style="font-size: 12px; font-family: 'Tahoma';">
               <img style="width:2.8%" src="resources/appeals.png">
                <input type="button" name="appeals" value="appeals" class="cool_button"
                       onclick="{document.main_actions_form.action.value=this.value;
-                       document.main_actions_form.submit();}"/>
+                       document.main_actions_form.target='_blank';
+                       document.main_actions_form.submit();
+                       document.main_actions_form.target='';}"/>
              </span>
-              &nbsp;&nbsp;&nbsp;
+             &nbsp;&nbsp;&nbsp;
+             <span style="font-size: 12px; font-family: 'Tahoma';">
+              <img style="width:2.5%" src="resources/archive.png">
+              <input type="button" name="archive" value="archive" class="cool_button"
+                     onclick="{document.main_actions_form.action.value=this.value;
+                       document.main_actions_form.target='_blank';
+                       document.main_actions_form.submit();
+                       document.main_actions_form.target='';}"/>
+             </span>
+                &nbsp;&nbsp;&nbsp;
              <span style="font-size: 12px; font-family: 'Tahoma';">
               <img style="width:2.5%" src="resources/settings.png">
                <input type="button" name="info" value="company_settings" class="cool_button"
@@ -94,15 +106,16 @@
 
      </fieldset>
      <br>
-     <fieldset class="dashboard_block_style_task" style=" border-radius: 3px">
+     <fieldset class="org_dashboard_block_style_task" style=" border-radius: 3px">
             <legend>Task Stream</legend>
-         <div class="scroll_block_task_general">
+         <div class="org_scroll_block_task">
             <%if (taskList.size() > 0) {
                 %>
              <table>
              <%
                  String deadlineColor;
                for (Task task : taskList) {
+                   if (!task.getState().equals(TaskStatesEnum.archived.getState())){
                    deadlineColor = Utils.getDeadLineColor(task);
                    %>
              <tr>
@@ -121,6 +134,7 @@
               </form>
              </tr>
              <%
+                     }
                }
              %>
              </table>
@@ -134,13 +148,15 @@
             }%>
         </div>
      </fieldset>
-     <br>
-     <fieldset class="dashboard_block_style_event" style=" border-radius: 3px">
-            <legend>Events</legend>
-         <div class="scroll_block_events">
-            <!-- events -->
-        </div>
-    </fieldset>
+
+        <%-- пока ленты событий не будет --%>
+     <%--<br>--%>
+     <%--<fieldset class="dashboard_block_style_event" style=" border-radius: 3px">--%>
+            <%--<legend>Events</legend>--%>
+         <%--<div class="scroll_block_events">--%>
+            <%--<!-- events -->--%>
+        <%--</div>--%>
+    <%--</fieldset>--%>
     </span>
 </div>
 <div id="footer">&copy; 2020</div>

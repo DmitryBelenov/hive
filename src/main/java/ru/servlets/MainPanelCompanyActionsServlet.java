@@ -1,6 +1,7 @@
 package ru.servlets;
 
 import ru.objects.OrgUser;
+import ru.objects.Task;
 import ru.objects.appeals.Appeal;
 import ru.utils.DBUtils;
 
@@ -56,6 +57,11 @@ public class MainPanelCompanyActionsServlet extends HttpServlet {
                 req.setAttribute("appeals", appeals);
             }
 
+            if (ActionsEnum.archive.getAction().equals(action)) {
+                List<Task> taskList = db.getShortOrgArchivedTaskList(org_uuid);
+                req.setAttribute("task_list", taskList);
+            }
+
             RequestDispatcher view = req.getRequestDispatcher(page);
             view.forward(req, resp);
 
@@ -71,7 +77,8 @@ public class MainPanelCompanyActionsServlet extends HttpServlet {
         userEvent("event", "addEventUser.jsp"),
         settings("company_settings", "companySettings.jsp"),
         userSettings("settings", "userSettings.jsp"),
-        appeals("appeals", "appeals.jsp");
+        appeals("appeals", "appeals.jsp"),
+        archive("archive", "archive.jsp");
 
         public String action;
         public String page;

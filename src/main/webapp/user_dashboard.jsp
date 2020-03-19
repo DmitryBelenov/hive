@@ -8,6 +8,7 @@
 <%@ page import="java.util.Arrays" %>
 <%@ page import="ru.objects.actions.Action" %>
 <%@ page import="ru.objects.roles.RolesEnum" %>
+<%@ page import="ru.objects.roles.TaskStatesEnum" %>
 <%@page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -64,13 +65,13 @@
                      onclick="{document.main_actions_form.action.value=this.value;
                        document.main_actions_form.submit();}"/>
              </span>
-               &nbsp;&nbsp;&nbsp;
-             <span style="font-size: 12px; font-family: 'Tahoma';">
-              <img style="width:2.5%" src="resources/event.png">
-              <input type="button" name="event" value="event" class="cool_button"
-                     onclick="{document.main_actions_form.action.value=this.value;
-                       document.main_actions_form.submit();}"/>
-             </span>
+               <%--&nbsp;&nbsp;&nbsp;--%>
+             <%--<span style="font-size: 12px; font-family: 'Tahoma';">--%>
+              <%--<img style="width:2.5%" src="resources/event.png">--%>
+              <%--<input type="button" name="event" value="event" class="cool_button"--%>
+                     <%--onclick="{document.main_actions_form.action.value=this.value;--%>
+                       <%--document.main_actions_form.submit();}"/>--%>
+             <%--</span>--%>
              <% if (Arrays.asList(RolesEnum.Manager.getRoleName(),
                      RolesEnum.Support.getRoleName()).contains(orgUser.getRole().getRoleName())) { %>
               &nbsp;&nbsp;&nbsp;
@@ -78,9 +79,20 @@
               <img style="width:2.8%" src="resources/appeals.png">
                <input type="button" name="appeals" value="appeals" class="cool_button"
                       onclick="{document.main_actions_form.action.value=this.value;
-                       document.main_actions_form.submit();}"/>
+                       document.main_actions_form.target='_blank';
+                       document.main_actions_form.submit();
+                       document.main_actions_form.target='';}"/>
              </span>
              <% }%>
+               &nbsp;&nbsp;&nbsp;
+             <span style="font-size: 12px; font-family: 'Tahoma';">
+              <img style="width:2.5%" src="resources/archive.png">
+              <input type="button" name="archive" value="archive" class="cool_button"
+                     onclick="{document.main_actions_form.action.value=this.value;
+                       document.main_actions_form.target='_blank';
+                       document.main_actions_form.submit();
+                       document.main_actions_form.target='';}"/>
+             </span>
               &nbsp;&nbsp;&nbsp;
              <span style="font-size: 12px; font-family: 'Tahoma';">
               <img style="width:2.5%" src="resources/settings.png">
@@ -101,6 +113,7 @@
              <%
                  String deadlineColor;
                  for (Task task : userTaskList) {
+                     if (!task.getState().equals(TaskStatesEnum.archived.getState())){
                      deadlineColor = Utils.getDeadLineColor(task);
              %>
              <tr>
@@ -120,6 +133,7 @@
               </form>
              </tr>
              <%
+                     }
                  }
              %>
              </table>
@@ -135,9 +149,9 @@
 
      </fieldset>
      <br>
-     <fieldset class="dashboard_block_style_task" style=" border-radius: 3px">
+     <fieldset class="user_dashboard_block_style_task" style=" border-radius: 3px">
             <legend>Task Stream</legend>
-         <div class="scroll_block_task_general">
+         <div class="user_scroll_block_task">
             <%
                 if (taskList.size() > 0) {
             %>
@@ -146,7 +160,7 @@
              <%
                  String deadlineColor;
                  for (Task task : taskList) {
-                     if (!userTaskIds.contains(task.getId())) {
+                     if (!userTaskIds.contains(task.getId()) && !task.getState().equals(TaskStatesEnum.archived.getState())) {
                          deadlineColor = Utils.getDeadLineColor(task);
              %>
              <tr>
@@ -184,13 +198,15 @@
             }%>
         </div>
      </fieldset>
-     <br>
-     <fieldset class="dashboard_block_style_event_short" style=" border-radius: 3px">
-            <legend>Events</legend>
-         <div class="scroll_block_events_short">
-            <!-- events -->
-        </div>
-    </fieldset>
+
+        <%-- пока ленты событий не будет --%>
+     <%--<br>--%>
+     <%--<fieldset class="dashboard_block_style_event_short" style=" border-radius: 3px">--%>
+            <%--<legend>Events</legend>--%>
+         <%--<div class="scroll_block_events_short">--%>
+            <%--<!-- events -->--%>
+        <%--</div>--%>
+    <%--</fieldset>--%>
     </span>
 
 </div>

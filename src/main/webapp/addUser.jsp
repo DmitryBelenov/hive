@@ -27,18 +27,18 @@
         <input type="text" name="uuid" id="org_uuid" value="<%= request.getAttribute("org_uuid")%>" hidden>
 
         <span style="font-size: 12px; color: #7B5427; font-family: 'Tahoma';">
-        <fieldset style="width:300px; margin: 0 auto; border: 1px solid">
+        <fieldset style="width:300px; margin: 0 auto; border: 1px solid; border-radius: 3px">
             <legend>User data</legend>
         first name:<br>
-            <input type="text" name="first_name" id="first_name" placeholder="max 100" maxlength="100"
-                   style="text-align: center">
+            <input type="text" name="first_name" id="first_name" maxlength="100"
+                   style="text-align: center; border-radius: 3px">
         <br>
         last name:<br>
-            <input type="text" name="last_name" id="last_name" placeholder="max 100" maxlength="100"
-                   style="text-align: center">
+            <input type="text" name="last_name" id="last_name" maxlength="100"
+                   style="text-align: center; border-radius: 3px">
         <br>
         role:<br>
-            <select id="roles" size="1" name="role" form="user_data">
+            <select id="roles" size="1" name="role" form="user_data" style="border-radius: 3px">
                 <% for (RolesEnum role : RolesEnum.values()) {
                     String roleName = role.getRoleName();
                 %><option><%= roleName%></option><%
@@ -46,17 +46,17 @@
 	        </select>
         <br>
         e-mail:<br>
-            <input type="text" name="e_mail" id="e_mail" placeholder="max 100" maxlength="100"
-                   style="text-align: center">
+            <input type="text" name="e_mail" id="e_mail" maxlength="100"
+                   style="text-align: center; border-radius: 3px">
         <br>
         icon:<br>
-            <select name="icon" size="1" form="user_data">
+            <select name="icon" size="1" form="user_data" style="border-radius: 3px">
                 <option>male</option>
                 <option>female</option>
 	        </select>
         <br>
         login:<br>
-            <input type="text" name="login" id="login" placeholder="max 50" maxlength="50" style="text-align: center">
+            <input type="text" name="login" id="login" maxlength="50" style="text-align: center; border-radius: 3px">
         <br><br>
         <button id="process" class="float-left submit-button cool_button">Register user</button>
         <script type="text/javascript">

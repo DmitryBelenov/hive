@@ -220,7 +220,7 @@
             <input type="text" name="user_uuid" value="<%= request.getAttribute("user_uuid")%>" hidden>
             <input type="text" name="task_id" value="<%= task.getId()%>" hidden>
 
-            <textarea rows="2" cols="106" name="content" id="comment" maxlength="1000" style="resize: none"></textarea>
+            <textarea rows="2" cols="106" name="content" id="comment" maxlength="1000" style="resize: none; border-radius: 3px;"></textarea>
             <div style="text-align: right">
             <button class="float-left submit-button cool_button" id="add_comment">comment</button>
                 <script>
