@@ -28,6 +28,29 @@
 Размер проекта версии 1.0 не более 2Мб.
 
 Как установить:
-Проект может быть использован как в локальных, так и глобальных сетях.
 
-1. 
+Проект может быть использован как в локальных, так и глобальных сетях.
+1. Скачать архив с проектом
+2. Установить postgreSQL в систему (если нет)
+3. Скриптами из create_project_tables.sql создать бд, пользователя, наполнить бд таблицами.
+Выполнять согласно номерам -- 1, -- 2 и т.д.
+4. Разместить файл hive.properties в каталог C:\Users\<имя пользователя>\Hive
+Состав файла настроек (дополнить своими данными):
+*****************************************************
+# general system properties for Hive tracker (v1.0)
+
+# for tomcat deploy use local ip 
+hive.server.ip=192.168.1.64
+#hive.server.ip=localhost
+#hive.server.port=8090
+hive.server.port=8080
+hive.http.type=http://
+# for tomcat deploy use app name 
+hive.app.deploy.name=hive
+#hive.app.deploy.name=hive_war_exploded
+
+# postgres database connection
+hive.db.name=hive
+hive.db.user=hiveadmin
+hive.db.password=777
+*****************************************************
