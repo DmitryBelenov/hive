@@ -1,4 +1,4 @@
-                               # HIVE
+                                 HIVE
 
                    Task tracker for SCRUM development 
 
@@ -34,23 +34,19 @@
 2. Установить postgreSQL в систему (если нет)
 3. Скриптами из create_project_tables.sql создать бд, пользователя, наполнить бд таблицами.
 Выполнять согласно номерам -- 1, -- 2 и т.д.
-4. Разместить файл hive.properties в каталог C:\Users\<имя пользователя>\Hive
-Состав файла настроек (дополнить своими данными):
-*****************************************************
-# general system properties for Hive tracker (v1.0)
+4. Установить Tomcat8,9. Разместить архив hive.war в каталог <ваш путь к tomcat>\webapps\
 
-# for tomcat deploy use local ip 
-hive.server.ip=192.168.1.64
-#hive.server.ip=localhost
-#hive.server.port=8090
-hive.server.port=8080
-hive.http.type=http://
-# for tomcat deploy use app name 
-hive.app.deploy.name=hive
-#hive.app.deploy.name=hive_war_exploded
+5. Разместить файл hive.properties в каталог C:\Users\<имя пользователя>\Hive
 
-# postgres database connection
-hive.db.name=hive
-hive.db.user=hiveadmin
-hive.db.password=777
-*****************************************************
+Состав файла настроек (дополнить своими данными в местах с тегами):
+
+hive.server.ip=<IP или hostname вашего сервера>
+
+hive.server.port=<Порт, на котором стартуете сервер>
+
+hive.http.type=<тип протокола http:// или https://>
+
+параметры базы данных так же можно изменить на свои
+(если при создании указать отличающиеся от тех, что в исходном скрипте)
+
+6. Произвести deploy приложения (запустить tomcat)
