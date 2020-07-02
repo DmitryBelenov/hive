@@ -1,6 +1,6 @@
-                                 HIVE
+#HIVE
 
-                   Task tracker for SCRUM development 
+Task tracker for SCRUM development 
 
 
 
